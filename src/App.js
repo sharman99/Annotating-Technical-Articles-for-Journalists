@@ -1,6 +1,8 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './App.css';
 import Modal from 'react-modal';
+import {Document, Page} from 'react-pdf';
+import PDFViewer from './PDFViewer';
 
 class App extends React.Component {
     constructor(props) {
@@ -14,6 +16,7 @@ class App extends React.Component {
     }
 
     componentDidMount(){
+        console.log(React.version)
     }
 
     render() {
@@ -22,6 +25,10 @@ class App extends React.Component {
                 <Modal className="modal"
                 isOpen={this.state.modalOpened}>
                 </Modal>
+
+                <div className="pdf">
+                    <PDFViewer/>
+                </div>
             </div>
         );
     }
