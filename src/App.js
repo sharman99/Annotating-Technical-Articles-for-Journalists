@@ -25,10 +25,8 @@ class App extends React.Component {
                 <Modal className="modal"
                 isOpen={this.state.modalOpened}>
                 </Modal>
-
-                <div className="pdf">
-                    <PDFViewer/>
-                </div>
+                
+                <PDFViewer/>
             </div>
         );
     }

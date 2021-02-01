@@ -1,7 +1,8 @@
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 import React, { useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
-import samplePDF from './Sleep-merged.pdf';
+import { Button } from '@material-ui/core';
+import { render } from '@testing-library/react';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -36,32 +37,58 @@ export default function PDFViewer() {
     });
   }
 
+  const [file, setFile] = React.useState("");
+  
+  function handleUpload(event) {
+    setFile(event.target.files[0]);
+  }
+
+  const hiddenFileInput = React.useRef(null);
+
+  const handleClick = event => {
+    hiddenFileInput.current.click();
+  }
+
   return (
     <>
-      <Document
-        file={samplePDF}
-        onLoadSuccess={onDocumentLoadSuccess}
-      >
-        <Page pageNumber={pageNumber} onLoadSuccess={removeTextLayerOffset}/>
-      </Document>
-      <div>
-        <p>
-          Page {pageNumber || (numPages ? 1 : '--')} of {numPages || '--'}
-        </p>
-        <button
-          type="button"
-          disabled={pageNumber <= 1}
-          onClick={previousPage}
-        >
-          Previous
-        </button>
-        <button
-          type="button"
-          disabled={pageNumber >= numPages}
-          onClick={nextPage}
-        >
-          Next
-        </button>
+      <div id="upload-box">
+        <Button variant="contained" id="button" onClick={handleClick}>
+          Upload a PDF
+        </Button>
+        <input type="file" ref={hiddenFileInput} onChange={handleUpload} accept=".pdf" style={{display: 'none'}}/>
+      </div>
+      <div id="pdf-box">
+      {file && 
+        <div>
+          <Document id="pdf"
+          file={file}
+          onLoadSuccess={onDocumentLoadSuccess}
+          >
+            <Page pageNumber={pageNumber} onLoadSuccess={removeTextLayerOffset}/>
+          </Document>
+          <div>
+            <p>
+              Page {pageNumber || (numPages ? 1 : '--')} of {numPages || '--'}
+            </p>
+            <Button
+              disabled={pageNumber <= 1}
+              onClick={previousPage}
+              variant="contained" 
+              id={pageNumber <= 1 ? "disabled" : "button"}
+            >
+              Previous
+            </Button>
+            <Button
+              disabled={pageNumber >= numPages}
+              onClick={nextPage}
+              variant="contained" 
+              id={pageNumber >= numPages ? "disabled" : "button"}
+            >
+              Next
+            </Button>
+          </div>
+        </div>
+      }
       </div>
     </>
   );
