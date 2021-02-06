@@ -12,6 +12,14 @@ export default function PDFViewer() {
   const [pageNumber, setPageNumber] = useState(1);
 
   function onDocumentLoadSuccess({ numPages }) {
+    //hardcoded file for now
+    const loadingTask = pdfjs.getDocument('Sleep-merged.pdf');
+    loadingTask.promise.then(pdfDocument => {
+      //view pdf metadata (title is sometimes found herre)
+      console.log(pdfDocument.getMetadata())
+    });
+
+
     setNumPages(numPages);
     setPageNumber(1);
   }
