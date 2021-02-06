@@ -19,7 +19,6 @@ export default function PDFViewer() {
       console.log(pdfDocument.getMetadata())
     });
 
-
     setNumPages(numPages);
     setPageNumber(1);
   }
@@ -67,17 +66,20 @@ export default function PDFViewer() {
         <input type="file" ref={hiddenFileInput} onChange={handleUpload} accept=".pdf" style={{display: 'none'}}/>
       </div>
       <div id="pdf-box">
-      {file && 
         <div>
           <div className="sidebyside">
             <ResearcherInfo/>
-            <Document id="pdf"
-            file={file}
-            onLoadSuccess={onDocumentLoadSuccess}
-            >
-              <Page pageNumber={pageNumber} onLoadSuccess={removeTextLayerOffset}/>
-            </Document>
-            </div>
+
+            {file && 
+              <Document id="pdf"
+              file={file}
+              onLoadSuccess={onDocumentLoadSuccess}
+              >
+                <Page pageNumber={pageNumber} onLoadSuccess={removeTextLayerOffset}/>
+              </Document>
+            }
+          </div>
+          {file &&
             <div>
               <p>
                 Page {pageNumber || (numPages ? 1 : '--')} of {numPages || '--'}
@@ -98,9 +100,9 @@ export default function PDFViewer() {
               >
               Next
               </Button>
-          </div>
+            </div>
+          } 
         </div>
-      }
       </div>
     </div>
   );

@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import './App.css';
 import Modal from 'react-modal';
 import PDFViewer from './PDFViewer';
+import ResearcherInfo from './ResearcherInfo';
 
 class App extends React.Component {
     constructor(props) {
