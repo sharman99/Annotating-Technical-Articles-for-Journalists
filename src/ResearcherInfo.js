@@ -17,7 +17,7 @@ class ResearcherInfo extends React.Component {
             year_published: '',
             default_paper: 'indexing by latent semantic analysis',
             paper_name: '',
-
+            DOImessage: '',
             found_paper: null,
         };
         this.handleChange = this.handleChange.bind(this);
@@ -33,6 +33,32 @@ class ResearcherInfo extends React.Component {
         console.log("paper name: " + this.state.paper_name)
     }
 
+    checkRetractions = async(DOI) =>{
+        var scraperapiClient = require('scraperapi-sdk')('d3316a379867bbb44fc3a4cab2b132e8')
+        
+        scraperapiClient.get('http://openretractions.com/api/doi/$' + DOI + '/data.json')
+            .then(response => {
+                console.log("RESPONSE")
+                console.log(response);
+                var jsonObject = JSON.parse(response);
+                if(jsonObject.retracted == true){
+                    this.setState({DOImessage: "This paper was retracted."})
+                }
+                else{
+                    var d = new Date(jsonObject.update.timestamp*1000);
+                    this.setState({DOImessage: "Update (type: " + jsonObject.update.type + ")  was made on " + d});
+                }
+            })
+            .catch(error => {
+                this.setState({DOImessage: "No recorded update in the database."})
+                console.log("ERROR")
+                console.log(error);
+                if(error.statusCode == 404){
+                    console.log("No recorded update in the database.")
+                }
+                console.log(error.statusCode)
+            });
+    }
 
     metadataPull = async (edited) => {
         var scraperapiClient = require('scraperapi-sdk')('d3316a379867bbb44fc3a4cab2b132e8')
@@ -41,8 +67,7 @@ class ResearcherInfo extends React.Component {
         //var response = await scraperapiClient.get('https://api.labs.cognitive.microsoft.com/academic/v1.0/evaluate?expr=Composite(AA.AuN==\'' + this.state.author_name + '\')&count=2&attributes=Ti,Y,CC,AA.AuN,AA.AuId&subscription-key=' + this.state.primary_key);
 
         //query by paper name 
-        var response = await scraperapiClient.get('https://api.labs.cognitive.microsoft.com/academic/v1.0/evaluate?expr=Ti=\'' + edited + '\'...&count=2&attributes=Ti,Y,CC,AA.AuN,DN,AA.AuId&subscription-key=' + this.state.primary_key);
-        
+        var response = await scraperapiClient.get('https://api.labs.cognitive.microsoft.com/academic/v1.0/evaluate?expr=Ti=\'' + edited + '\'...&count=2&attributes=Ti,Y,CC,AA.AuN,DN,DOI,AA.AuId&subscription-key=' + this.state.primary_key);
         console.log(response)
         var jsonObject = JSON.parse(response);
 
@@ -54,6 +79,9 @@ class ResearcherInfo extends React.Component {
             this.setState({citation_count: jsonObject.entities[0].CC})
             this.setState({year_published: jsonObject.entities[0].Y})
             this.setState({title: jsonObject.entities[0].DN})
+            
+            let DOIval = jsonObject.entities[0].DOI;
+            this.checkRetractions(DOIval);
         }
         else{
             this.setState({found_paper: false});
@@ -100,6 +128,7 @@ class ResearcherInfo extends React.Component {
                     <div>Citation Count: {this.state.citation_count}</div>
                     <div>Year Published: {this.state.year_published}</div>
                 </div>
+                <div>Retraction State: {this.state.DOImessage}</div>
             </div>
         );
     }
