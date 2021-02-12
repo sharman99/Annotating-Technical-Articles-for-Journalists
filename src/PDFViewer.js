@@ -5,22 +5,37 @@ import { Button } from '@material-ui/core';
 import { render } from '@testing-library/react';
 import ResearcherInfo from './ResearcherInfo';
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 export default function PDFViewer() {
+
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
 
+
   function onDocumentLoadSuccess({ numPages }) {
-    //hardcoded file for now
+    setNumPages(numPages);
+    setPageNumber(1);
+  }
+
+  function getText (){
+    console.log(file)
+
+    //hardcoded file for now. You can replace 'Sleep-merged.pdf' with the file variable but it outputs an error...
     const loadingTask = pdfjs.getDocument('Sleep-merged.pdf');
     loadingTask.promise.then(pdfDocument => {
       //view pdf metadata (title is sometimes found herre)
       console.log(pdfDocument.getMetadata())
-    });
 
-    setNumPages(numPages);
-    setPageNumber(1);
+        // Loading document and page text content
+        pdfDocument.getPage(1).then(function (page) {
+          var viewport = page.getViewport(1);
+          page.getTextContent().then(function (textContent) {
+            // building SVG and adding that to the DOM
+            console.log(textContent)
+          });
+        });
+    });
   }
 
   function changePage(offset) {
@@ -49,6 +64,7 @@ export default function PDFViewer() {
   
   function handleUpload(event) {
     setFile(event.target.files[0]);
+    getText();
   }
 
   const hiddenFileInput = React.useRef(null);

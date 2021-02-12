@@ -11,6 +11,7 @@
     "axios": "^0.21.1",
     "express": "^4.17.1",
     "google-scholar": "^1.5.1",
+    "pdf-extract": "^1.0.11",
     "react": "^17.0.1",
     "react-csv": "^2.0.3",
     "react-dom": "^17.0.1",
