@@ -8,6 +8,7 @@
     "@testing-library/jest-dom": "^5.11.5",
     "@testing-library/react": "^11.1.1",
     "@testing-library/user-event": "^12.2.0",
+    "annotpdf": "^1.0.13",
     "axios": "^0.21.1",
     "express": "^4.17.1",
     "google-scholar": "^1.5.1",
@@ -17,6 +18,8 @@
     "react-dom": "^17.0.1",
     "react-modal": "^3.11.2",
     "react-pdf": "^5.1.0",
+    "react-pdf-highlighter": "^3.4.0",
+    "react-pdf-viewer": "^0.1.0",
     "react-scripts": "4.0.0",
     "scraperapi-sdk": "^1.0.6",
     "web-vitals": "^0.2.4"
@@ -31,7 +34,10 @@
     "extends": [
       "react-app",
       "react-app/jest"
-    ]
+    ],
+    "rules": {
+      "import/no-webpack-loader-syntax": "off"
+    }
   },
   "browserslist": {
     "production": [
