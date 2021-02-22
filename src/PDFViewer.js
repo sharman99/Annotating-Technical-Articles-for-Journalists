@@ -4,6 +4,7 @@ import { Document, Page, pdfjs } from 'react-pdf';
 import { Button } from '@material-ui/core';
 import { render } from '@testing-library/react';
 import ResearcherInfo from './ResearcherInfo';
+import { identifyTerms } from "./nlp"
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
@@ -28,13 +29,14 @@ export default function PDFViewer() {
 
             pdf.getPage(1).then(function(page) {
               var viewport = page.getViewport(1);
-              page.getTextContent().then(function (textContent) {
-                console.log(textContent)
+              page.getTextContent().then(function(textContent) {
+                const pageText = textContent.items.map(item => item.str).join(" ");
+                identifyTerms(pageText);
               });
             });
 
         });
-    }
+    };
 
     fileReader.readAsArrayBuffer(uploadedFile);
 
