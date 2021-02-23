@@ -4,41 +4,22 @@ import { Document, Page, pdfjs } from 'react-pdf';
 import { Button } from '@material-ui/core';
 import { render } from '@testing-library/react';
 import ResearcherInfo from './ResearcherInfo';
+import { identifyTerms } from "./terms"
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 export default function PDFViewer() {
 
+  // *** PDF DISPLAY ***
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
+  const [file, setFile] = React.useState("");
+  const hiddenFileInput = React.useRef(null);
 
   function onDocumentLoadSuccess({ numPages }) {
     setNumPages(numPages);
     setPageNumber(1);
-  }
-
-  function getText(uploadedFile) {
-
-    var fileReader = new FileReader();
-    fileReader.onload = function() {
-
-        var typedArray = new Uint8Array(this.result);
-
-        pdfjs.getDocument(typedArray).promise.then(function(pdf) {
-
-            pdf.getPage(1).then(function(page) {
-              var viewport = page.getViewport(1);
-              page.getTextContent().then(function (textContent) {
-                console.log(textContent)
-              });
-            });
-
-        });
-    }
-
-    fileReader.readAsArrayBuffer(uploadedFile);
-
-  }
+  };
 
   function changePage(offset) {
     setPageNumber(prevPageNumber => prevPageNumber + offset);
@@ -62,26 +43,60 @@ export default function PDFViewer() {
     });
   }
 
-  const [file, setFile] = React.useState("");
-  
   function handleUpload(event) {
     const uploadedFile = event.target.files[0];
     setFile(uploadedFile);
-    getText(uploadedFile);
-  }
+    extractText(uploadedFile, (text) => {
 
-  const hiddenFileInput = React.useRef(null);
+      identifyTerms(text, onTermExtraction); 
+
+    });
+  }
 
   const handleClick = event => {
     hiddenFileInput.current.click();
   }
 
-  // Highlight recipe: https://github.com/wojtekmaj/react-pdf/wiki/Recipes#highlight-text-on-the-page
+  // *** HIGHLIGHTING ***
+  const [textItems, setTextItems] = useState();
+  const [stringsToHighlight, setStringsToHighlight] = useState([]);
+  var matchedPatterns = [];
+
+  function onTermExtraction(allKeyterms) {
+    setStringsToHighlight(allKeyterms.retextKeyphrasesTerms);
+  };
+
+  function extractText(uploadedFile, callback) {
+
+    const fileReader = new FileReader();
+    fileReader.onload = function() {
+
+        const typedArray = new Uint8Array(this.result);
+        pdfjs.getDocument(typedArray).promise.then(function(pdf) {
+
+            pdf.getPage(1).then(function(page) {
+              page.getTextContent().then(function(textContent) {
+
+                const pageText = textContent.items.map(item => item.str).join(" ");
+                callback(pageText);
+
+              });
+            });
+
+        });
+    };
+
+    fileReader.readAsArrayBuffer(uploadedFile);
+
+  }
+
+  // Highlight recipe: github.com/wojtekmaj/react-pdf/wiki/Recipes#highlight-text-on-the-page
   function highlightPattern(text, toHighlight, left=[], right=[]) {
 
     // TODO: require left patterns to be on left, right on right
     const patterns = [...toHighlight, ...left, ...right];
-    const allPatterns = new RegExp(patterns.join('|'), 'gi');
+    const unmatchedPatterns = patterns.filter(p => !matchedPatterns.includes(p));
+    const allPatterns = new RegExp(unmatchedPatterns.join('|'), 'gi');
 
     const splitText = text.split(allPatterns);
     if (splitText.length <= 1) {
@@ -89,6 +104,8 @@ export default function PDFViewer() {
     }
 
     const matches = text.match(allPatterns);
+    matchedPatterns = [...matchedPatterns, ...matches]; 
+
     return splitText.reduce((arr, element, index) => (matches[index] ? [
       ...arr,
       element,
@@ -100,16 +117,13 @@ export default function PDFViewer() {
   };
 
   // Logic for highlighting across multiple text items
-  // *** FROM https://github.com/wojtekmaj/react-pdf/issues/614#issuecomment-664212981 (slightly adapted) ***
-  const [textItems, setTextItems] = useState();
-  const [stringsToHighlight, setStringsToHighlight] = useState(['SARS-CoV-2', 'D614G', 'G614', 'COVID-19', 'epidemiology', 'pseudoviruses']);
-
-  function getTextItemWithNeighbors(textItems, itemIndex, span = 1, includeSpace = true) {
+  // *** FROM github.com/wojtekmaj/react-pdf/issues/614#issuecomment-664212981 (slightly adapted) ***
+  function getTextItemWithNeighbors(textItems, itemIndex, span = 1) {
     return textItems
       .slice(Math.max(0, itemIndex - span), itemIndex + 1 + span)
       .filter(Boolean)
       .map(item => item.str)
-      .join(includeSpace ? ' ' : ''); // CC added space
+      .join(""); // CC set to " " i/o ""
   }
 
   function getIndexRange(string, substring) {
@@ -134,13 +148,8 @@ export default function PDFViewer() {
     var leftPartialMatches = [];
     var rightPartialMatches = [];
 
+    // Look for partial matches across multiple text items...
     for (const stringToHighlight of stringsToHighlight) {
-
-      /* Look for search string in item
-      const matchInTextItem = textItem.str.match(stringToHighlight);
-      if (matchInTextItem) {
-        continue;
-      } */
 
       // Check across multiple items
       const textItemWithNeighbors = getTextItemWithNeighbors(textItems, itemIndex);
