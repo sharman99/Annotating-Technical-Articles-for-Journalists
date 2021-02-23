@@ -4,7 +4,9 @@ import { Document, Page, pdfjs } from 'react-pdf';
 import { Button } from '@material-ui/core';
 import { render } from '@testing-library/react';
 import ResearcherInfo from './ResearcherInfo';
-import { identifyTerms } from "./terms"
+import Summary from './Summary';
+import { identifyTerms } from './terms';
+import { summarize } from './summarize';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
@@ -15,11 +17,12 @@ export default function PDFViewer() {
   const [pageNumber, setPageNumber] = useState(1);
   const [file, setFile] = React.useState("");
   const hiddenFileInput = React.useRef(null);
+  const [sectionTexts, setSectionTexts] = useState([]);
 
   function onDocumentLoadSuccess({ numPages }) {
     setNumPages(numPages);
     setPageNumber(1);
-  };
+  }
 
   function changePage(offset) {
     setPageNumber(prevPageNumber => prevPageNumber + offset);
@@ -43,28 +46,61 @@ export default function PDFViewer() {
     });
   }
 
+  const handleClick = event => {
+    hiddenFileInput.current.click();
+  }
+
   function handleUpload(event) {
     const uploadedFile = event.target.files[0];
     setFile(uploadedFile);
     extractText(uploadedFile, (text) => {
 
-      identifyTerms(text, onTermExtraction); 
+      const sectionTexts = splitBySection(text);
+      setSectionTexts(sectionTexts);
+      identifyTerms(text, onTermIdentification);
 
     });
   }
 
-  const handleClick = event => {
-    hiddenFileInput.current.click();
+  function splitBySection(text) {
+
+    const sectionHeaders = ["Abstract", "Introduction", "Results", "Methods", "Discussion", "Conclusion", "Conclusions", "References", "Funding"];
+
+    let currentSectionWords = [];
+    let currentSectionName = "";
+    let sectionTexts = [{ "name" : "All", "text" : text }];
+
+    for (const word of text.split(" ")) {
+
+      if (word.length === 0) {
+        continue;
+      }
+
+      const titleCaseWord = word[0].toUpperCase() + word.substr(1).toLowerCase();
+      if (sectionHeaders.includes(word) || sectionHeaders.includes(titleCaseWord)) { // new section starts
+
+        if (currentSectionName) {
+          // if currentSctionName empty, we're not in a section yet, ignore that text
+          sectionTexts.push({ "name" : currentSectionName, "text" : currentSectionWords.join(" ") });
+        }
+
+        currentSectionName = sectionHeaders.find(sH => sH === word) || sectionHeaders.find(sH => sH === titleCaseWord);
+        currentSectionWords = [];
+
+      } else { // current section continues
+
+        currentSectionWords.push(word);
+
+      }
+
+    }
+
+    sectionTexts.push({ "name" : currentSectionName, "text" : currentSectionWords.join(" ") });
+    console.log("sectionTexts ", sectionTexts);
+
+    return sectionTexts;
+
   }
-
-  // *** HIGHLIGHTING ***
-  const [textItems, setTextItems] = useState();
-  const [stringsToHighlight, setStringsToHighlight] = useState([]);
-  var matchedPatterns = [];
-
-  function onTermExtraction(allKeyterms) {
-    setStringsToHighlight(allKeyterms.retextKeyphrasesTerms);
-  };
 
   function extractText(uploadedFile, callback) {
 
@@ -74,13 +110,20 @@ export default function PDFViewer() {
         const typedArray = new Uint8Array(this.result);
         pdfjs.getDocument(typedArray).promise.then(function(pdf) {
 
-            pdf.getPage(1).then(function(page) {
-              page.getTextContent().then(function(textContent) {
+            // https://stackoverflow.com/a/40662025/2809263
+            const pageTextPromises = [];
+            for (var j = 1; j <= pdf.numPages; j++) {
 
-                const pageText = textContent.items.map(item => item.str).join(" ");
-                callback(pageText);
+              pageTextPromises.push(pdf.getPage(j).then(function(page) {
+                return page.getTextContent().then(function(textContent) {
+                  return textContent.items.map(item => item.str).join(" ");
+                });
+              }));
 
-              });
+            }
+
+            Promise.all(pageTextPromises).then(function(pageTexts) {
+              callback(pageTexts.join(" "));
             });
 
         });
@@ -90,13 +133,26 @@ export default function PDFViewer() {
 
   }
 
+  // *** HIGHLIGHTING ***
+  const [textItems, setTextItems] = useState();
+  const [stringsToHighlight, setStringsToHighlight] = useState([]);
+  var matchedPatterns = [];
+
+  function onTermIdentification(allKeyterms) {
+    setStringsToHighlight(allKeyterms.retextKeyphrasesTerms);
+  }
+
   // Highlight recipe: github.com/wojtekmaj/react-pdf/wiki/Recipes#highlight-text-on-the-page
   function highlightPattern(text, toHighlight, left=[], right=[]) {
+
+    function escapeForRegex(s) { // https://stackoverflow.com/a/6969486/2809263
+      return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
 
     // TODO: require left patterns to be on left, right on right
     const patterns = [...toHighlight, ...left, ...right];
     const unmatchedPatterns = patterns.filter(p => !matchedPatterns.includes(p));
-    const allPatterns = new RegExp(unmatchedPatterns.join('|'), 'gi');
+    const allPatterns = new RegExp(unmatchedPatterns.map(escapeForRegex).join('|'), 'gi');
 
     const splitText = text.split(allPatterns);
     if (splitText.length <= 1) {
@@ -114,7 +170,7 @@ export default function PDFViewer() {
       </mark>,
     ] : [...arr, element]), []);
 
-  };
+  }
 
   // Logic for highlighting across multiple text items
   // *** FROM github.com/wojtekmaj/react-pdf/issues/614#issuecomment-664212981 (slightly adapted) ***
@@ -136,7 +192,7 @@ export default function PDFViewer() {
     const textContent = await page.getTextContent();
     setTextItems(textContent.items);
     removeTextLayerOffset();
-  }, []);
+  }, [])
 
   const textRenderer = useCallback(textItem => {
     if (!textItems) {
@@ -196,7 +252,10 @@ export default function PDFViewer() {
       <div id="pdf-box">
         <div>
           <div className="sidebyside">
-            <ResearcherInfo/>
+            <div>
+              <ResearcherInfo/>
+              <Summary sections={sectionTexts} summarizer={summarize} />
+            </div>
 
             {file && 
               <Document id="pdf"
