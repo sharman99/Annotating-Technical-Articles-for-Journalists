@@ -55,7 +55,6 @@ export default function PDFViewer() {
     setFile(uploadedFile);
     extractText(uploadedFile, (text) => {
 
-      console.log("extractText text ", text);
       identifyTerms(text, onTermIdentification);
       summarize(text, onSummarization); // TODO: Summarize whole article, not just page
 
@@ -63,7 +62,6 @@ export default function PDFViewer() {
   }
 
   function onSummarization(summaries) {
-    console.log("onSummarization ", summaries);
     setSummary(summaries.lexrankSummary);
   }
 
@@ -73,7 +71,6 @@ export default function PDFViewer() {
   var matchedPatterns = [];
 
   function onTermIdentification(allKeyterms) {
-    console.log("allKeyterms ", allKeyterms);
     setStringsToHighlight(allKeyterms.retextKeyphrasesTerms);
   }
 
@@ -118,7 +115,6 @@ export default function PDFViewer() {
     // TODO: require left patterns to be on left, right on right
     const patterns = [...toHighlight, ...left, ...right];
     const unmatchedPatterns = patterns.filter(p => !matchedPatterns.includes(p));
-    console.log("unmatchedPatterns ", unmatchedPatterns);
     const allPatterns = new RegExp(unmatchedPatterns.map(escapeForRegex).join('|'), 'gi');
 
     const splitText = text.split(allPatterns);

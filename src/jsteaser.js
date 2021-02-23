@@ -1,5 +1,6 @@
 'use strict';
 
+// https://github.com/n3m6/jsteaser
 
 export function JsTeaser(article) {  
   this.title = article.title;
