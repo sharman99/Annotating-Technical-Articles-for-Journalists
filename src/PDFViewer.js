@@ -18,6 +18,7 @@ export default function PDFViewer() {
   const [file, setFile] = React.useState("");
   const hiddenFileInput = React.useRef(null);
   const [summary, setSummary] = useState("");
+  const [sectionTexts, setSectionTexts] = useState([]);
 
   function onDocumentLoadSuccess({ numPages }) {
     setNumPages(numPages);
@@ -55,23 +56,52 @@ export default function PDFViewer() {
     setFile(uploadedFile);
     extractText(uploadedFile, (text) => {
 
+      const sectionTexts = splitBySection(text);
+      setSectionTexts(sectionTexts);
       identifyTerms(text, onTermIdentification);
       summarize(text, onSummarization); // TODO: Summarize whole article, not just page
 
     });
   }
 
-  function onSummarization(summaries) {
-    setSummary(summaries.lexrankSummary);
-  }
+  function splitBySection(text) {
 
-  // *** HIGHLIGHTING ***
-  const [textItems, setTextItems] = useState();
-  const [stringsToHighlight, setStringsToHighlight] = useState([]);
-  var matchedPatterns = [];
+    const sectionHeaders = ["Abstract", "Introduction", "Results", "Methods", "Discussion", "Conclusion", "Conclusions", "References", "Funding"];
 
-  function onTermIdentification(allKeyterms) {
-    setStringsToHighlight(allKeyterms.retextKeyphrasesTerms);
+    let currentSectionWords = [];
+    let currentSectionName = "";
+    let sectionTexts = [{ "name" : "All", "text" : text }];
+
+    for (const word of text.split(" ")) {
+
+      if (word.length === 0) {
+        continue;
+      }
+
+      const titleCaseWord = word[0].toUpperCase() + word.substr(1).toLowerCase();
+      if (sectionHeaders.includes(word) || sectionHeaders.includes(titleCaseWord)) { // new section starts
+
+        if (currentSectionName) {
+          // if currentSctionName empty, we're not in a section yet, ignore that text
+          sectionTexts.push({ "name" : currentSectionName, "text" : currentSectionWords.join(" ") });
+        }
+
+        currentSectionName = sectionHeaders.find(sH => sH === word) || sectionHeaders.find(sH => sH === titleCaseWord);
+        currentSectionWords = [];
+
+      } else { // current section continues
+
+        currentSectionWords.push(word);
+
+      }
+
+    }
+
+    sectionTexts.push({ "name" : currentSectionName, "text" : currentSectionWords.join(" ") });
+    console.log("sectionTexts ", sectionTexts);
+
+    return sectionTexts;
+
   }
 
   function extractText(uploadedFile, callback) {
@@ -103,6 +133,19 @@ export default function PDFViewer() {
 
     fileReader.readAsArrayBuffer(uploadedFile);
 
+  }
+
+  function onSummarization(summaries) {
+    setSummary(summaries.lexrankSummary);
+  }
+
+  // *** HIGHLIGHTING ***
+  const [textItems, setTextItems] = useState();
+  const [stringsToHighlight, setStringsToHighlight] = useState([]);
+  var matchedPatterns = [];
+
+  function onTermIdentification(allKeyterms) {
+    setStringsToHighlight(allKeyterms.retextKeyphrasesTerms);
   }
 
   // Highlight recipe: github.com/wojtekmaj/react-pdf/wiki/Recipes#highlight-text-on-the-page
@@ -217,7 +260,10 @@ export default function PDFViewer() {
           <div className="sidebyside">
             <div>
               <ResearcherInfo/>
-              <Summary summary={summary} />
+              <Summary
+                sections={sectionTexts}
+                summarizer={summarize}
+              />
             </div>
 
             {file && 
