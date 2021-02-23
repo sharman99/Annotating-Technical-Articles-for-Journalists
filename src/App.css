@@ -41,11 +41,13 @@
     gap: 10px;
     outline: 1px solid black;
     padding: 10px;
-    width: 20%;
+    width: 200px;
+    /*width: 20%;*/
     margin-left: 20px;
-    position: absolute;
-    left: 0;
+    /*position: absolute;*/
+    /*left: 0;*/
     text-align: left;
+    margin-bottom: 10px;
 }
 
 .resume{
@@ -55,6 +57,7 @@
 .sidebyside{
     display: flex;
     flex-direction: row;
+    gap: 10px;
 }
 
 #red{

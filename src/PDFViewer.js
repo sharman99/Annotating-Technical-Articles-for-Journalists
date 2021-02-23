@@ -4,7 +4,9 @@ import { Document, Page, pdfjs } from 'react-pdf';
 import { Button } from '@material-ui/core';
 import { render } from '@testing-library/react';
 import ResearcherInfo from './ResearcherInfo';
-import { identifyTerms } from "./terms"
+import Summary from './Summary';
+import { identifyTerms } from './terms';
+import { summarize } from './summarize';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
@@ -15,11 +17,12 @@ export default function PDFViewer() {
   const [pageNumber, setPageNumber] = useState(1);
   const [file, setFile] = React.useState("");
   const hiddenFileInput = React.useRef(null);
+  const [summary, setSummary] = useState("");
 
   function onDocumentLoadSuccess({ numPages }) {
     setNumPages(numPages);
     setPageNumber(1);
-  };
+  }
 
   function changePage(offset) {
     setPageNumber(prevPageNumber => prevPageNumber + offset);
@@ -43,18 +46,25 @@ export default function PDFViewer() {
     });
   }
 
+  const handleClick = event => {
+    hiddenFileInput.current.click();
+  }
+
   function handleUpload(event) {
     const uploadedFile = event.target.files[0];
     setFile(uploadedFile);
     extractText(uploadedFile, (text) => {
 
-      identifyTerms(text, onTermExtraction); 
+      console.log("extractText text ", text);
+      identifyTerms(text, onTermIdentification);
+      summarize(text, onSummarization); // TODO: Summarize whole article, not just page
 
     });
   }
 
-  const handleClick = event => {
-    hiddenFileInput.current.click();
+  function onSummarization(summaries) {
+    console.log("onSummarization ", summaries);
+    setSummary(summaries.lexrankSummary);
   }
 
   // *** HIGHLIGHTING ***
@@ -62,9 +72,10 @@ export default function PDFViewer() {
   const [stringsToHighlight, setStringsToHighlight] = useState([]);
   var matchedPatterns = [];
 
-  function onTermExtraction(allKeyterms) {
+  function onTermIdentification(allKeyterms) {
+    console.log("allKeyterms ", allKeyterms);
     setStringsToHighlight(allKeyterms.retextKeyphrasesTerms);
-  };
+  }
 
   function extractText(uploadedFile, callback) {
 
@@ -74,13 +85,20 @@ export default function PDFViewer() {
         const typedArray = new Uint8Array(this.result);
         pdfjs.getDocument(typedArray).promise.then(function(pdf) {
 
-            pdf.getPage(1).then(function(page) {
-              page.getTextContent().then(function(textContent) {
+            // https://stackoverflow.com/a/40662025/2809263
+            const pageTextPromises = [];
+            for (var j = 1; j <= pdf.numPages; j++) {
 
-                const pageText = textContent.items.map(item => item.str).join(" ");
-                callback(pageText);
+              pageTextPromises.push(pdf.getPage(j).then(function(page) {
+                return page.getTextContent().then(function(textContent) {
+                  return textContent.items.map(item => item.str).join(" ");
+                });
+              }));
 
-              });
+            }
+
+            Promise.all(pageTextPromises).then(function(pageTexts) {
+              callback(pageTexts.join(" "));
             });
 
         });
@@ -93,10 +111,15 @@ export default function PDFViewer() {
   // Highlight recipe: github.com/wojtekmaj/react-pdf/wiki/Recipes#highlight-text-on-the-page
   function highlightPattern(text, toHighlight, left=[], right=[]) {
 
+    function escapeForRegex(s) { // https://stackoverflow.com/a/6969486/2809263
+      return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
     // TODO: require left patterns to be on left, right on right
     const patterns = [...toHighlight, ...left, ...right];
     const unmatchedPatterns = patterns.filter(p => !matchedPatterns.includes(p));
-    const allPatterns = new RegExp(unmatchedPatterns.join('|'), 'gi');
+    console.log("unmatchedPatterns ", unmatchedPatterns);
+    const allPatterns = new RegExp(unmatchedPatterns.map(escapeForRegex).join('|'), 'gi');
 
     const splitText = text.split(allPatterns);
     if (splitText.length <= 1) {
@@ -114,7 +137,7 @@ export default function PDFViewer() {
       </mark>,
     ] : [...arr, element]), []);
 
-  };
+  }
 
   // Logic for highlighting across multiple text items
   // *** FROM github.com/wojtekmaj/react-pdf/issues/614#issuecomment-664212981 (slightly adapted) ***
@@ -136,7 +159,7 @@ export default function PDFViewer() {
     const textContent = await page.getTextContent();
     setTextItems(textContent.items);
     removeTextLayerOffset();
-  }, []);
+  }, [])
 
   const textRenderer = useCallback(textItem => {
     if (!textItems) {
@@ -196,7 +219,10 @@ export default function PDFViewer() {
       <div id="pdf-box">
         <div>
           <div className="sidebyside">
-            <ResearcherInfo/>
+            <div>
+              <ResearcherInfo/>
+              <Summary summary={summary} />
+            </div>
 
             {file && 
               <Document id="pdf"
