@@ -17,7 +17,6 @@ export default function PDFViewer() {
   const [pageNumber, setPageNumber] = useState(1);
   const [file, setFile] = React.useState("");
   const hiddenFileInput = React.useRef(null);
-  const [summary, setSummary] = useState("");
   const [sectionTexts, setSectionTexts] = useState([]);
 
   function onDocumentLoadSuccess({ numPages }) {
@@ -59,7 +58,6 @@ export default function PDFViewer() {
       const sectionTexts = splitBySection(text);
       setSectionTexts(sectionTexts);
       identifyTerms(text, onTermIdentification);
-      summarize(text, onSummarization); // TODO: Summarize whole article, not just page
 
     });
   }
@@ -133,10 +131,6 @@ export default function PDFViewer() {
 
     fileReader.readAsArrayBuffer(uploadedFile);
 
-  }
-
-  function onSummarization(summaries) {
-    setSummary(summaries.lexrankSummary);
   }
 
   // *** HIGHLIGHTING ***
@@ -260,10 +254,7 @@ export default function PDFViewer() {
           <div className="sidebyside">
             <div>
               <ResearcherInfo/>
-              <Summary
-                sections={sectionTexts}
-                summarizer={summarize}
-              />
+              <Summary sections={sectionTexts} summarizer={summarize} />
             </div>
 
             {file && 
