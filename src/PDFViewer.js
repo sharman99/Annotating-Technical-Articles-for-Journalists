@@ -165,7 +165,7 @@ export default function PDFViewer() {
     return splitText.reduce((arr, element, index) => (matches[index] ? [
       ...arr,
       element,
-      <mark key={index}>
+      <mark key={index} className="highlight">
         {matches[index]}
       </mark>,
     ] : [...arr, element]), []);
