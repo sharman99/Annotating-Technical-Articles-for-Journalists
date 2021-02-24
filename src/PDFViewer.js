@@ -1,5 +1,5 @@
 import 'react-pdf/dist/umd/Page/AnnotationLayer.css';
-import React, { useCallback,  useState } from 'react';
+import React, { useCallback,  useEffect, useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 import { Button } from '@material-ui/core';
 import { render } from '@testing-library/react';
@@ -7,6 +7,9 @@ import ResearcherInfo from './ResearcherInfo';
 import Summary from './Summary';
 import { identifyTerms } from './terms';
 import { summarize } from './summarize';
+
+import ReactTooltip from 'react-tooltip';
+const wtf = require('wtf_wikipedia');
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
@@ -102,6 +105,11 @@ export default function PDFViewer() {
 
   }
 
+  useEffect(() => {
+    console.log("rebuilding tooltip");
+    ReactTooltip.rebuild();
+  });
+
   function extractText(uploadedFile, callback) {
 
     const fileReader = new FileReader();
@@ -139,7 +147,47 @@ export default function PDFViewer() {
   var matchedPatterns = [];
 
   function onTermIdentification(allKeyterms) {
-    setStringsToHighlight(allKeyterms.retextKeyphrasesTerms);
+    const terms = allKeyterms.retextKeyphrasesTerms;
+    getExplanations(terms);
+    setStringsToHighlight(terms);
+  }
+
+  const [explanations, setExplanations] = useState({});
+  function getExplanations(terms) {
+
+    // Search Wikipedia for each term
+    const wikiPromises = terms.map(term => wtf.fetch(term).then(doc => {
+      if (doc) {
+        const s1 = doc.sentences(0).text();
+        return [term, s1 + " (Wikipedia)"];
+      } else {
+        return [term, "no wiki for " + term];
+      }
+    }));
+
+    Promise.all(wikiPromises).then(results => {
+
+      let newExps = {}
+      for (const res of results) {
+        const [term, exp] = res;
+        newExps[term] = exp;
+      };
+
+      const fullNewExps = { ...explanations, ...newExps };
+      setExplanations(fullNewExps);
+
+    });
+
+  };
+
+  function tooltipText(term) {
+
+    if (term in explanations) {
+      return explanations[term];
+    } else {
+      return "tooltip: " + term;
+    }
+
   }
 
   // Highlight recipe: github.com/wojtekmaj/react-pdf/wiki/Recipes#highlight-text-on-the-page
@@ -165,7 +213,12 @@ export default function PDFViewer() {
     return splitText.reduce((arr, element, index) => (matches[index] ? [
       ...arr,
       element,
-      <mark key={index}>
+      <mark
+        key={index}
+        className="highlight"
+        data-tip={tooltipText(matches[index])}
+        data-for="highlight-tooltip"
+      >
         {matches[index]}
       </mark>,
     ] : [...arr, element]), []);
@@ -238,7 +291,7 @@ export default function PDFViewer() {
 
     return highlightPattern(textItem.str, stringsToHighlight, leftPartialMatches, rightPartialMatches);
 
-  }, [stringsToHighlight, textItems]);
+  }, [stringsToHighlight, textItems, explanations]);
   // *** END FROM ***
 
   return (
@@ -249,6 +302,7 @@ export default function PDFViewer() {
         </Button>
         <input type="file" ref={hiddenFileInput} onChange={handleUpload} accept=".pdf" style={{display: 'none'}}/>
       </div>
+      <ReactTooltip id="highlight-tooltip" className="highlight-tooltip" />
       <div id="pdf-box">
         <div>
           <div className="sidebyside">

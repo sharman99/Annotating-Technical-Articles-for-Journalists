@@ -7,24 +7,24 @@
     font-family: 'Rubik', sans-serif;
 }
 
-#upload-box{
+#upload-box {
     background: #fff5c4;
     padding: 50px;
     margin-bottom: 50px;
 }
 
-#pdf-box{
+#pdf-box {
     display: flex;
     flex-direction: column;
     align-items: center;
     padding-bottom: 25px;
 }
 
-.react-pdf__Document{
+.react-pdf__Document {
     outline: solid black 1px;
 }
 
-#button{
+#button {
     background: #FE6847;
     color: white;
 }
@@ -35,7 +35,7 @@
     opacity: 0.7;
 }
 
-.metadata{
+.metadata {
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -50,16 +50,26 @@
     margin-bottom: 10px;
 }
 
-.resume{
+.resume {
     text-align: center;
 }
 
-.sidebyside{
+.sidebyside {
     display: flex;
     flex-direction: row;
     gap: 10px;
 }
 
-#red{
+#red {
     color: red;
+}
+
+/* Style highlighting */
+mark.highlight {
+  color: transparent;
+  opacity: 0.4;
+}
+
+.highlight-tooltip {
+  max-width: 300px;
 }
