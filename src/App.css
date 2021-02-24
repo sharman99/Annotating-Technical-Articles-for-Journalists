@@ -69,3 +69,7 @@ mark.highlight {
   color: transparent;
   opacity: 0.4;
 }
+
+.highlight-tooltip {
+  max-width: 300px;
+}

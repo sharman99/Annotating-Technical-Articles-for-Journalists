@@ -4,13 +4,13 @@ const SummarizerManager = require('node-summarizer').SummarizerManager;
 const tr = require('textrank');
 const sum = require('sum');
 
-const N_SENTENCES = 5;
+const N_SENTENCES = 3;
 
 // TODO: Use article title (e.g., with jsteaser) for better results?
 export function summarize(text, callback) {
 
   // Run summarization algorithms
-  const textRankSummary = doTextRank(text);
+  const textRankSummary = ""; //doTextRank(text);
   const jsTeaserSummary = doJsTeaser(text);
   const sumSummary = doSum(text); 
 
