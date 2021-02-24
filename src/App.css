@@ -8,6 +8,7 @@
 }
 
 #upload-box {
+    text-align: center;
     background: #fff5c4;
     padding: 50px;
     margin-bottom: 50px;
@@ -42,16 +43,9 @@
     outline: 1px solid black;
     padding: 10px;
     width: 200px;
-    /*width: 20%;*/
     margin-left: 20px;
-    /*position: absolute;*/
-    /*left: 0;*/
     text-align: left;
     margin-bottom: 10px;
-}
-
-.resume {
-    text-align: center;
 }
 
 .sidebyside {
@@ -72,4 +66,5 @@ mark.highlight {
 
 .highlight-tooltip {
   max-width: 300px;
+  text-align: center;
 }

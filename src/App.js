@@ -1,8 +1,7 @@
-import React, {useState} from 'react';
+import React from 'react';
 import './App.css';
 import Modal from 'react-modal';
-import PDFViewer from './PDFViewer';
-import ResearcherInfo from './ResearcherInfo';
+import Annotator from './Annotator';
 
 class App extends React.Component {
     constructor(props) {
@@ -12,21 +11,15 @@ class App extends React.Component {
         };
     }
 
-    toggleModal() {
-    }
-
-    componentDidMount(){
-        console.log(React.version)
+    componentDidMount() {
+        console.log(React.version);
     }
 
     render() {
         return (
-            <div className="App">                
-                <Modal className="modal"
-                isOpen={this.state.modalOpened}>
-                </Modal>
-                
-                <PDFViewer/>
+            <div className='App'>
+                <Modal className='modal' isOpen={this.state.modalOpened}></Modal>
+                <Annotator />
             </div>
         );
     }
