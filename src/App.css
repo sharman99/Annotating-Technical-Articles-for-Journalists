@@ -7,11 +7,35 @@
     font-family: 'Rubik', sans-serif;
 }
 
-#upload-box {
+#explainer {
+    text-align: center;
+    height: 800px;
+}
+
+.explainer-text {
+    display: block;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+}
+
+#explainer-text-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 1000px;
+}
+
+#logo {
+    font-weight: 900;
+    font-size: 35px;
+}
+
+#header {
     text-align: center;
     background: #fff5c4;
-    padding: 50px;
-    margin-bottom: 50px;
+    padding: 10px;
+    margin-bottom: 30px;
+    height: 40px;
 }
 
 #pdf-box {
