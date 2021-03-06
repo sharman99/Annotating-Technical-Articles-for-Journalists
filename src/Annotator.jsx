@@ -88,13 +88,13 @@ export default function Annotator() {
 
   return (
     <div className='resume'>
-      <div id='upload-box'>
+      <div id='header'>
         <Button variant='contained' id='button' onClick={handleClick}>
           Upload a PDF
         </Button>
         <input type='file' ref={hiddenFileInput} onChange={handleUpload} accept='.pdf' style={{display: 'none'}}/>
       </div>
-      <div id='pdf-box'>
+      {file && (<div id='pdf-box'>
         <div className='sidebyside'>
           <div>
             <ResearcherInfo/>
@@ -102,7 +102,19 @@ export default function Annotator() {
           </div>
           <PDFViewer file={file} sectionTexts={sectionTexts} text={text} />
         </div>
-      </div>
+      </div>)}
+      {!file && (
+        <div id='explainer'>
+          <div id='explainer-text-container'>
+            <span id='logo' class='explainer-text'>
+              Annotating technical articles
+            </span>
+            <span class='explainer-text'>
+              Upload a PDF to get started
+            </span>
+          </div>
+        </div>
+      )}
     </div>
   );
 
