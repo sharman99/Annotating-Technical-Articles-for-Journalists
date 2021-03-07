@@ -12,10 +12,26 @@ const keywords = require('retext-keywords');
 const toString = require('nlcst-to-string');
 const RETEXT_MAX = 20;
 
-export function identifyTerms(text, callback) {
+export function identifyTerms(text, termExtractor, callback) {
 
+  if (termExtractor == "Natural") {
+    callback(doNatural(text, craftData.documents));
+  } else if (termExtractor == "Compromise") {
+    callback(doCompromise(text));
+  } else if (termExtractor == "Rake") {
+    callback(doRake(text));
+  } else if (termExtractor == "KeywordExtractor") {
+    callback(doKeywordExtractor(text));
+  } else if (termExtractor == "Retext Key Terms") {
+    doRetext(text, RETEXT_MAX, (keyTerms, keyPhrases) => callback(keyTerms));
+  } else if (termExtractor == "Retext Key Phrases") {
+    doRetext(text, RETEXT_MAX, (keyTerms, keyPhrases) => callback(keyPhrases));
+  } else {
+    console.log("!error: unknown term extractor ", termExtractor); 
+  }
+  
   // Run term-extraction algorithms
-  const naturalTerms = doNatural(text, craftData.documents);
+  /*const naturalTerms = doNatural(text, craftData.documents);
   const compromiseTerms = doCompromise(text); 
   const rakeTerms = doRake(text); 
   const keywordExtractorTerms = doKeywordExtractor(text);
@@ -34,7 +50,7 @@ export function identifyTerms(text, callback) {
     callback(allKeyterms);
 
   };
-  doRetext(text, RETEXT_MAX, retextDone);
+  doRetext(text, RETEXT_MAX, retextDone);*/
 
 };
 

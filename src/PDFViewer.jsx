@@ -4,6 +4,10 @@ import ReactTooltip from 'react-tooltip';
 import { Document, Page, pdfjs } from 'react-pdf';
 import { Button } from '@material-ui/core';
 import { identifyTerms } from './terms';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+
+const termExtractors = ["Natural", "Compromise", "Rake", "KeywordExtractor", "Retext Key Terms", "Retext Key Phrases"];
 
 const wtf = require('wtf_wikipedia');
 
@@ -14,6 +18,7 @@ export default function PDFViewer({ text, file, sectionTexts }) {
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [textItems, setTextItems] = useState();
+  const [selectedTermExtractor, setSelectedTermExtractor] = useState("Retext Key Phrases");
   const [keyTerms, setKeyTerms] = useState([]);
   const [explanations, setExplanations] = useState({});
   var matchedPatterns = [];
@@ -22,6 +27,8 @@ export default function PDFViewer({ text, file, sectionTexts }) {
     setNumPages(numPages);
     setPageNumber(1);
   };
+
+  console.log("PDFViewer render with selectedTermExtractor", selectedTermExtractor);
 
   const changePage = (offset) => {
     setPageNumber(prevPageNumber => prevPageNumber + offset);
@@ -40,7 +47,7 @@ export default function PDFViewer({ text, file, sectionTexts }) {
   const getExplanations = terms => {
     // Search Wikipedia for each term
     const wikiSearches = terms.map(term => wtf.fetch(term)
-      .then(doc => [term, doc ? `${doc.sentences(0).text()} (Wikipedia)` : term]));
+      .then(doc => [term, (doc && doc.sentences(0)) ? `${doc.sentences(0).text()} (Wikipedia)` : term]));
 
     Promise.all(wikiSearches).then(wikipediaResults => {
       setExplanations(prevExplanations => ({ ...prevExplanations, ...Object.fromEntries(wikipediaResults) }));
@@ -48,11 +55,16 @@ export default function PDFViewer({ text, file, sectionTexts }) {
   };
 
   if (text && keyTerms.length === 0) {
-    identifyTerms(text, (allKeyTerms) => {
-      const terms = allKeyTerms.retextKeyphrasesTerms;
+    identifyTerms(text, selectedTermExtractor, terms => {
+      console.log("n key terms ", terms.length);
       getExplanations(terms);
       setKeyTerms(terms);
     });
+    /*identifyTerms(text, (allKeyTerms) => {
+      const terms = allKeyTerms.retextKeyphrasesTerms;
+      getExplanations(terms);
+      setKeyTerms(terms);
+    });*/
   }
 
   useEffect(() => ReactTooltip.rebuild());
@@ -125,6 +137,7 @@ export default function PDFViewer({ text, file, sectionTexts }) {
     for (const keyTerm of keyTerms) {
 
       // Check across multiple items
+      console.log("keyTerm ", keyTerm);
       const textItemWithNeighbors = getTextItemWithNeighbors(textItems, itemIndex);
       const matchInTextItemWithNeighbors = textItemWithNeighbors.match(keyTerm);
       if (!matchInTextItemWithNeighbors) {
@@ -157,9 +170,25 @@ export default function PDFViewer({ text, file, sectionTexts }) {
 
   }, [keyTerms, textItems, explanations]);
 
+  const handleTermExtractorChange = event => {
+    setKeyTerms([]);
+    const newTermExtractor = event.target.value;
+    setSelectedTermExtractor(newTermExtractor);
+  };
+
   return (
     <div>
       <ReactTooltip id='highlight-tooltip' className='highlight-tooltip' />
+      <Select
+        labelId='termExtractor-select-label'
+        id='termExtractor-select'
+        value={selectedTermExtractor}
+        onChange={handleTermExtractorChange}
+      >
+        {termExtractors.map(tE => (
+          <MenuItem value={tE}>{tE}</MenuItem>
+        ))}
+      </Select>
       {file &&
         <Document id='pdf'
           file={file}
