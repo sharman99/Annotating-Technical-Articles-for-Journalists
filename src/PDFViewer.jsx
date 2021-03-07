@@ -7,7 +7,7 @@ import { identifyTerms } from './terms';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 
-const termExtractors = ["Natural", "Compromise", "Rake", "KeywordExtractor", "Retext Key Terms", "Retext Key Phrases"];
+const termExtractors = ["Natural", "Compromise", "Rake", "Retext Key Terms", "Retext Key Phrases"];
 
 const wtf = require('wtf_wikipedia');
 
@@ -60,11 +60,6 @@ export default function PDFViewer({ text, file, sectionTexts }) {
       getExplanations(terms);
       setKeyTerms(terms);
     });
-    /*identifyTerms(text, (allKeyTerms) => {
-      const terms = allKeyTerms.retextKeyphrasesTerms;
-      getExplanations(terms);
-      setKeyTerms(terms);
-    });*/
   }
 
   useEffect(() => ReactTooltip.rebuild());
@@ -137,7 +132,6 @@ export default function PDFViewer({ text, file, sectionTexts }) {
     for (const keyTerm of keyTerms) {
 
       // Check across multiple items
-      console.log("keyTerm ", keyTerm);
       const textItemWithNeighbors = getTextItemWithNeighbors(textItems, itemIndex);
       const matchInTextItemWithNeighbors = textItemWithNeighbors.match(keyTerm);
       if (!matchInTextItemWithNeighbors) {

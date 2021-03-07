@@ -17,7 +17,7 @@ const parseResult = result => {
 // Cached, since may call once to get title, later for summaries, etc.
 export function getDoPaperDigest() {
 
-  const PRETEND = true; // Don't use up API calls while developing
+  const PRETEND = false; // Don't use up API calls while developing
   let cache = {};
 
   return (file, nSentences=3) => {
