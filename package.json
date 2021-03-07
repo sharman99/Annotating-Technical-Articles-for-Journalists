@@ -19,6 +19,7 @@
     "lodash": "^4.17.21",
     "natural": "^4.0.0",
     "nlcst-to-string": "^2.0.4",
+    "nlpcloud": "^1.0.7",
     "node-nlp": "^4.21.3",
     "node-summarizer": "^1.0.7",
     "pdf-extract": "^1.0.11",

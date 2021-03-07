@@ -5,6 +5,8 @@ const request = require('request');
 const SummarizerManager = require('node-summarizer').SummarizerManager;
 const tr = require('textrank');
 const sum = require('sum');
+const NLPCloudClient = require('nlpcloud');
+
 
 const N_SENTENCES = 3;
 const EMPTY_TEXT = "No summary available for this section. Please try another section.";
@@ -14,6 +16,8 @@ export function summarize({ selectedSummarizer, ...args }) {
 
   ({
 
+    /*"Vectorspace": doVectorspace,*/
+    "Bart": doBart,
     "Text Monkey": doTextMonkey,
     "Paper Digest" : doPaperDigest,
     "JS Teaser" : doJsTeaser,
@@ -24,9 +28,64 @@ export function summarize({ selectedSummarizer, ...args }) {
 
 };
 
-function doTextMonkey({ selectedSection, sectionTexts, title, callback }) {
+function doBart({ selectedSection, sectionTexts, callback }) {
 
-  console.log("doAylien");
+  const apiKey = "4d47dda23cf7bc539461418bf02e27cd800a0577";
+  const client = new NLPCloudClient('en_core_web_lg', apiKey); //'4eC39HqLyjWDarjtT1zdp7dc')
+
+  // Returns an Axios promise with the results.
+  // In case of success, results are contained in `response.data`. 
+  // In case of failure, you can retrieve the status code in `err.response.status` 
+  // and the error message in `err.response.data.detail`.
+  client.entities("John Doe is a Go Developer at Google")
+    .then(function (response) {
+      console.log(response.data);
+    })
+    .catch(function (err) {
+      console.log(err);
+      console.error(err.response.status);
+      console.error(err.response.data.detail);
+    });
+
+  /*const rawText = sectionTexts.find(s => s['name'] === selectedSection).text;
+  const WORD_LIMIT = 100;
+  const text = rawText.split(" ").slice(1, WORD_LIMIT).join(" ");
+
+  const apiKey = "4d47dda23cf7bc539461418bf02e27cd800a0577";
+  const client = new NLPCloudClient("bart-large-cnn", apiKey);
+
+  client.summarization(text)
+    .then(response => {
+      console.log("bart response ", response);
+    }).catch(err => {
+      console.log("bart err ", err);
+    });*/
+  
+
+}
+
+function doVectorspace({ selectedSection, sectionTexts, callback }) {
+
+  const text = sectionTexts.find(s => s['name'] === selectedSection).text;
+  const options = {
+    method: 'GET',
+    url: 'https://vectorspaceai-vectorspace-ai-summarizer-v1.p.rapidapi.com/recommend/app/summarize',
+    qs: {query: 'text', vxv_token_addr: '0xC2A568489BF6AAC5907fa69f8FD4A9c04323081D'},
+    headers: {
+      'x-rapidapi-key': 'c0e038c6dcmsh8e1cc6a5a5144c8p18b556jsndd49f7573f1a',
+      'x-rapidapi-host': 'vectorspaceai-vectorspace-ai-summarizer-v1.p.rapidapi.com',
+      useQueryString: true
+    }
+  };
+
+  request(options, function (error, response, body) {
+    if (error) throw new Error(error);
+    console.log("body ", body);
+  });
+
+}
+
+function doTextMonkey({ selectedSection, sectionTexts, title, callback }) {
 
   const text = sectionTexts.find(s => s['name'] === selectedSection).text;
 
