@@ -129,7 +129,12 @@ export default function Annotator() {
         <div className='sidebyside'>
           <div>
             <ResearcherInfo title={title} />
-            <Summary file={file} getPD={getPD} sectionTexts={sectionTexts} />
+            <Summary
+              file={file}
+              getPD={getPD}
+              sectionTexts={sectionTexts}
+              title={title}
+            />
           </div>
           <PDFViewer file={file} sectionTexts={sectionTexts} text={text} />
         </div>
