@@ -4,13 +4,13 @@ import MenuItem from '@material-ui/core/MenuItem';
 
 import { summarize } from './summarize';
 
-const summarizers = ["TextRank", "JSTeaser", "Sum", "Paper Digest", "LexRank" ];
+const summarizers = ["TextRank", "JSTeaser", "Sum", "Paper Digest", "LexRank", "Text Monkey" ];
 
 const fixedSectionSummarizers = [
   { name: 'Paper Digest', sections: ["introduction", "results", "discussion", "conclusions"] },
 ];
 
-const Summary = ({ file, getPD, sectionTexts }) => {
+const Summary = ({ file, getPD, sectionTexts, title }) => {
 
   const [selectedSummarizer, setSelectedSummarizer] = useState('LexRank');
 
@@ -34,6 +34,7 @@ const Summary = ({ file, getPD, sectionTexts }) => {
       getPD,
       sectionTexts,
       file,
+      title,
       callback: (summary) => {
         console.log("summarizer returned ", summary);
         setSelectedSectionSummary(summary);

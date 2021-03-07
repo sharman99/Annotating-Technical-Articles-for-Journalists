@@ -31,6 +31,7 @@
     "react-pdf": "^5.1.0",
     "react-scripts": "4.0.0",
     "react-tooltip": "^4.2.14",
+    "request": "^2.88.2",
     "retext": "^7.0.1",
     "retext-keywords": "^6.0.0",
     "retext-pos": "^3.0.0",
@@ -41,6 +42,7 @@
     "tf-idf-text-summarization": "github:ericyhliu/tf-idf-text-summarization",
     "to-vfile": "^6.1.0",
     "underscore": "^1.12.0",
+    "unirest": "^0.6.0",
     "web-vitals": "^0.2.4",
     "wtf_wikipedia": "^8.5.1"
   },

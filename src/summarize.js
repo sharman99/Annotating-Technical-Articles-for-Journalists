@@ -1,5 +1,7 @@
 import { JsTeaser } from './jsteaser';
 const lexrank = require('lexrank.js');
+const unirest = require('unirest');
+const request = require('request');
 const SummarizerManager = require('node-summarizer').SummarizerManager;
 const tr = require('textrank');
 const sum = require('sum');
@@ -12,6 +14,7 @@ export function summarize({ selectedSummarizer, ...args }) {
 
   ({
 
+    "Text Monkey": doTextMonkey,
     "Paper Digest" : doPaperDigest,
     "JS Teaser" : doJsTeaser,
     "Sum" : doSum,
@@ -20,6 +23,33 @@ export function summarize({ selectedSummarizer, ...args }) {
   })[selectedSummarizer](args);
 
 };
+
+function doTextMonkey({ selectedSection, sectionTexts, title, callback }) {
+
+  console.log("doAylien");
+
+  const text = sectionTexts.find(s => s['name'] === selectedSection).text;
+
+  const options = {
+    method: 'POST',
+    url: 'https://text-monkey-summarizer.p.rapidapi.com/nlp/summarize',
+    headers: {
+      'content-type': 'application/json',
+      'x-rapidapi-key': 'c0e038c6dcmsh8e1cc6a5a5144c8p18b556jsndd49f7573f1a',
+      'x-rapidapi-host': 'text-monkey-summarizer.p.rapidapi.com',
+      useQueryString: true
+    },
+    body: {
+      text,
+    },
+    json: true
+  };
+
+  request(options, (error, response, body) => {
+    callback(body.summary);
+  });
+
+}
 
 function doPaperDigest({ selectedSection, getPD, file, callback }) {
 
@@ -40,11 +70,11 @@ function doSum({ selectedSection, sectionTexts, callback }) {
 
 }
 
-function doJsTeaser({ selectedSection, sectionTexts, callback }) {
+function doJsTeaser({ selectedSection, sectionTexts, title, callback }) {
 
   const text = sectionTexts.find(s => s['name'] === selectedSection).text;
   const data = {
-    title: "Title", // crashes if title is "" or " "
+    title: title || "Title", // crashes if empty
     text, 
   };
 
