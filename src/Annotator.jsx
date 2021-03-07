@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { pdfjs } from 'react-pdf';
 import { Button } from '@material-ui/core';
 
+import { getDoPaperDigest } from './paperDigest';
 import PDFViewer from './PDFViewer';
 import ResearcherInfo from './ResearcherInfo';
 import Summary from './Summary';
@@ -13,6 +14,8 @@ export default function Annotator() {
 
   const [file, setFile] = React.useState('');
   const [text, setText] = useState('');
+  const [title, setTitle] = useState('');
+  const [getPD, _] = useState(() => getDoPaperDigest());
   const [sectionTexts, setSectionTexts] = useState([]);
   const hiddenFileInput = React.useRef(null);
 
@@ -37,10 +40,28 @@ export default function Annotator() {
         const typedArray = new Uint8Array(this.result);
         pdfjs.getDocument(typedArray).promise.then(pdf => {
 
+            pdf.getMetadata().then(metadata => {
+              const title = metadata.info['Title'] || (
+                metadata.metadata
+                  ? metadata.metadata.get('dc:title')
+                  : '');
+              if (title) {
+                setTitle(title);
+              } else {
+                getPD(uploadedFile)
+                  .then(result => {
+                    console.log("Paper digest result ", result);
+                    const title = result.metadata.title;
+                    console.log("From paper digest got title ", title);
+                    setTitle(title);
+                  });
+              }
+            });
+
             const pageTextPromises = [...Array(pdf.numPages).keys()].map(pageN =>
               pdf.getPage(pageN + 1).then(page =>
                 page.getTextContent().then(textContent =>
-                  textContent.items.map(item => item.str).join(' ')
+                  textContent.items.map(item => item.str).join(' ').replace(/- /g, '')
                 )
               )
             );
@@ -61,6 +82,7 @@ export default function Annotator() {
     let currentSectionWords = [];
     let currentSectionName = '';
     let sectionTexts = [{ 'name' : 'All', 'text' : text }];
+    let firstSectionText = '';
 
     for (const word of text.split(' ')) {
       if (word.length === 0) {
@@ -70,7 +92,9 @@ export default function Annotator() {
       const titleCaseWord = word[0].toUpperCase() + word.substr(1).toLowerCase();
       if (sectionHeaders.includes(word) || sectionHeaders.includes(titleCaseWord)) {
 
-        if (currentSectionName) { // ignore text before first section name
+        if (!currentSectionName) {
+          firstSectionText = currentSectionWords.join(' ');
+        } else if (currentSectionName) { // ignore text before first section name
           sectionTexts.push({ 'name' : currentSectionName, 'text' : currentSectionWords.join(' ') });
         }
         currentSectionName = sectionHeaders.find(sH => sH === word) || sectionHeaders.find(sH => sH === titleCaseWord);
@@ -82,6 +106,13 @@ export default function Annotator() {
     }
 
     sectionTexts.push({ 'name' : currentSectionName, 'text' : currentSectionWords.join(' ') });
+
+    //If still haven't seen abtract, asusme whatever came before first section was that
+    const abstractCheck = sectionTexts.find(s => s['name'] === 'Abstract');
+    if (typeof abstractCheck == 'undefined') {
+      sectionTexts.splice(1, 0, { 'name' : 'Abstract', 'text' : firstSectionText });
+    }
+
     return sectionTexts;
 
   };
@@ -97,8 +128,8 @@ export default function Annotator() {
       {file && (<div id='pdf-box'>
         <div className='sidebyside'>
           <div>
-            <ResearcherInfo/>
-            <Summary sections={sectionTexts} />
+            <ResearcherInfo title={title} />
+            <Summary file={file} getPD={getPD} sectionTexts={sectionTexts} />
           </div>
           <PDFViewer file={file} sectionTexts={sectionTexts} text={text} />
         </div>
@@ -106,10 +137,10 @@ export default function Annotator() {
       {!file && (
         <div id='explainer'>
           <div id='explainer-text-container'>
-            <span id='logo' class='explainer-text'>
+            <span id='logo' className='explainer-text'>
               Annotating technical articles
             </span>
-            <span class='explainer-text'>
+            <span className='explainer-text'>
               Upload a PDF to get started
             </span>
           </div>
