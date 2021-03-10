@@ -19,18 +19,64 @@ class ResearcherInfo extends React.Component {
             paper_name: '',
             DOImessage: '',
             found_paper: null,
+            title: '',
         };
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+        //this.handleChange = this.handleChange.bind(this);
+        //this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     toggleModal() {
     }
 
+    componentWillReceiveProps (newProps) {
+        if( newProps.title !== this.state.title ){
+            console.log("NEW TITLE: " + newProps.title)
+            this.setState({title: newProps.title})
+            if(newProps.title != null && newProps.title != '' && newProps.title != " "){
+                console.log("IN HERE tITLE")
+                //this.setState({title: newProps.title});
+                this.setState({title: newProps.title}, () => {
+                    console.log("set state title to : " + this.state.title)
+                    var edited = this.state.title.replace(/[^\w\s]/gi, '');
+                    edited = edited.toLowerCase();
+                    console.log("edited: " + edited)
+                    this.metadataPull(edited);
+                    this.setState({submitted: true})
+                    this.setState({citation_count: ''})
+                    this.setState({year_published: ''})
+                })
+            }
+            else{
+                this.setState({found_paper: false});
+                this.setState({title: ''})
+                this.setState({citation_count: ''})
+                this.setState({year_published: ''})
+            }
+        }
+    }
+
     componentDidMount(){
         console.log(React.version)
+        //console.log("paper name: " + this.state.paper_name)
 
-        console.log("paper name: " + this.state.paper_name)
+        console.log("TITLE: " + this.props.title)
+        if(this.props.title != null && this.props.title != '' && this.props.title != " "){
+            this.setState({title: this.props.title}, () => {
+                var edited = this.state.title.replace(/[^\w\s]/gi, '');
+                edited = edited.toLowerCase();
+                console.log("edited: " + edited)
+                this.metadataPull(edited);
+                this.setState({submitted: true})
+                this.setState({citation_count: ''})
+                this.setState({year_published: ''})
+            })
+        }
+        else{
+            this.setState({found_paper: false});
+            this.setState({title: ''})
+            this.setState({citation_count: ''})
+            this.setState({year_published: ''})
+        }
     }
 
     checkRetractions = async(DOI) =>{
@@ -85,13 +131,13 @@ class ResearcherInfo extends React.Component {
         }
         else{
             this.setState({found_paper: false});
-            this.setState({title: ''})
-            this.setState({citation_count: ''})
-            this.setState({year_published: ''})
+            //this.setState({title: ''})
+            this.setState({citation_count: 'not found'})
+            this.setState({year_published: 'not found'})
         }
     }
 
-    handleSubmit(event){
+    /*handleSubmit(event){
         //this.setState({found_paper: true});
         event.preventDefault();
         var edited = this.state.paper_name.replace(/[^\w\s]/gi, '');
@@ -100,7 +146,7 @@ class ResearcherInfo extends React.Component {
         console.log("edited: " + edited)
         this.metadataPull(edited);
         this.setState({submitted: true})
-    }
+    }*/
 
     handleChange(event){
         this.setState({paper_name : event.target.value})
@@ -110,7 +156,7 @@ class ResearcherInfo extends React.Component {
     render() {
         return (
             <div className='metadata'>
-                <div><strong>Metadata Search:</strong></div>
+                {/*<div><strong>Metadata:</strong></div>
 
                 <form onSubmit={this.handleSubmit}>
                     <label>
@@ -118,11 +164,11 @@ class ResearcherInfo extends React.Component {
                         <input type="text" value={this.state.paper_name} onChange={this.handleChange}/>
                     </label>
                     <input type="submit" value="Submit" />
-                </form>
+                </form>*/}
 
                 {!this.state.found_paper && this.state.submitted && this.state.paper_name != '' && <div id="red">Cannot Find Paper</div>}
 
-                <div><strong>Results:</strong></div>
+                <div><strong>Metadata:</strong></div>
                 <div>
                     <div>Title: {this.state.title}</div>
                     <div>Citation Count: {this.state.citation_count}</div>

@@ -9,7 +9,7 @@
     "@testing-library/react": "^11.1.1",
     "@testing-library/user-event": "^12.2.0",
     "axios": "^0.21.1",
-    "compromise": "^13.9.3",
+    "compromise": "^13.10.1",
     "express": "^4.17.1",
     "google-scholar": "^1.5.1",
     "gramophone": "0.0.3",
