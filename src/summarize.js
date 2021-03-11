@@ -55,7 +55,8 @@ function doSciTLDR({ sectionTexts, callback }) {
 
   const headers = { 'Content-Type': 'application/json' };
 
-  fetch('http://localhost:3001/tldr', { headers, body: JSON.stringify(data), method: 'POST' })
+  //fetch('http://localhost:3001/tldr', { headers, body: JSON.stringify(data), method: 'POST' })
+  fetch('/tldr', { headers, body: JSON.stringify(data), method: 'POST' })
     .then((res) => res.json())
     .then((data) => { console.log("backend data ", data); callback(data['answer']) });
 
@@ -70,7 +71,8 @@ function doBart({ selectedSection, sectionTexts, callback }) {
   const data = { text };
   const headers = { 'Content-Type': 'application/json' };
 
-  fetch('http://localhost:3001/bart', { headers, body: JSON.stringify(data), method: 'POST' })
+  //fetch('http://localhost:3001/bart', { headers, body: JSON.stringify(data), method: 'POST' })
+  fetch('/bart', { headers, body: JSON.stringify(data), method: 'POST' })
     .then((res) => res.json())
     .then((data) => { console.log("backend data ", data); callback(data['summary_text']) });
 
