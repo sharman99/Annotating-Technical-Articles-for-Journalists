@@ -20,6 +20,7 @@ app.get('/api', (req, res) => {
 
 app.post('/bart', (req, res) => {
 
+  console.log('bart with pre-init client called');
   const text = req.body.text;
 
   res.setHeader('Access-Control-Allow-Origin', '*');
