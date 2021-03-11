@@ -6,6 +6,9 @@ const path = require('path')
 
 const PORT = process.env.PORT || 3001;
 
+const NLPCLOUD_API_KEY = '4d47dda23cf7bc539461418bf02e27cd800a0577';
+const client = new NLPCloudClient('bart-large-cnn', NLPCLOUD_API_KEY);
+
 const app = express();
 
 app.use(cors());
@@ -18,9 +21,6 @@ app.get('/api', (req, res) => {
 app.post('/bart', (req, res) => {
 
   const text = req.body.text;
-  const NLPCLOUD_API_KEY = '4d47dda23cf7bc539461418bf02e27cd800a0577';
-  const client = new NLPCloudClient('bart-large-cnn', NLPCLOUD_API_KEY);
-
   res.setHeader('Access-Control-Allow-Origin', '*');
 
   client.summarization(text)

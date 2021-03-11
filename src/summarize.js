@@ -13,7 +13,7 @@ const SERVER = 'http://agile-journey-26810.herokuapp.com';
 // TODO: Use article title (e.g., with jsteaser) for better results?a
 export function summarize({ selectedSummarizer, ...args }) {
 
-  console.log("summarize() called with  args ", args);
+  console.log("summarize() called with summarizer ", selectedSummarizer, "  args ", args);
 
   ({
 
@@ -64,6 +64,8 @@ function doSciTLDR({ sectionTexts, callback }) {
 }
 
 function doBart({ selectedSection, sectionTexts, callback }) {
+
+  console.log("doBart");
 
   const rawText = sectionTexts.find(s => s['name'] === selectedSection).text;
   const TOKEN_LIMIT = 700; // NLPCloud/Bart won't summarize more than 1024 tokens; but their tokenization is more aggressive than breaking on spaces

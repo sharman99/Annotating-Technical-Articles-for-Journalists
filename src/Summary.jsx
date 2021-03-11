@@ -14,6 +14,7 @@ const fixedSectionSummarizers = [
 const Summary = ({ file, getPD, sectionTexts, title }) => {
 
   const [selectedSummarizer, setSelectedSummarizer] = useState('LexRank');
+  const [isSummarizing, setIsSummarizing] = useState(false);
 
   // Set up available sections
   const fixedSectionSummarizer = fixedSectionSummarizers.find(s => s['name'] === selectedSummarizer);
@@ -28,7 +29,8 @@ const Summary = ({ file, getPD, sectionTexts, title }) => {
 
   const [selectedSectionSummary, setSelectedSectionSummary] = useState('');
 
-  if (selectedSection && !selectedSectionSummary) {
+  if (selectedSection && !selectedSectionSummary && !isSummarizing) {
+    setIsSummarizing(true);
     summarize({
       selectedSummarizer,
       selectedSection,
@@ -39,6 +41,7 @@ const Summary = ({ file, getPD, sectionTexts, title }) => {
       callback: (summary) => {
         console.log("summarizer returned ", summary);
         setSelectedSectionSummary(summary);
+        setIsSummarizing(false);
       }
     });
   }
