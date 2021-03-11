@@ -59,7 +59,7 @@ function doSciTLDR({ sectionTexts, callback }) {
   //fetch('http://localhost:3001/tldr', { headers, body: JSON.stringify(data), method: 'POST' })
   fetch(SERVER + '/tldr', { headers, body: JSON.stringify(data), method: 'POST' })
     .then((res) => res.json())
-    .then((data) => { console.log("backend data ", data); callback(data['answer']) });
+    .then((data) => { console.log("backend data ", data); callback(data['answer'] || 'Not available') });
 
 }
 
