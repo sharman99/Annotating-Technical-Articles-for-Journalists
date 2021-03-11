@@ -1,5 +1,6 @@
 const cors = require('cors');
 const express = require('express');
+const fetch = require('node-fetch');
 const NLPCloudClient = require('nlpcloud');
 const path = require('path')
 
@@ -26,6 +27,32 @@ app.post('/bart', (req, res) => {
     }).catch(function(err) {
       res.json(err);
     });
+
+});
+
+app.post('/tldr', (req, res) => {
+
+  const data = req.body;
+
+  fetch("https://scitldr.apps.allenai.org/api/solve", {
+    "headers": {
+      "accept": "application/json, text/plain, */*",
+      "accept-language": "en-US,en;q=0.9",
+      "content-type": "application/json;charset=UTF-8",
+      "sec-ch-ua": "\"Google Chrome\";v=\"89\", \"Chromium\";v=\"89\", \";Not A Brand\";v=\"99\"",
+      "sec-ch-ua-mobile": "?0",
+      "sec-fetch-dest": "empty",
+      "sec-fetch-mode": "cors",
+      "sec-fetch-site": "same-origin",
+      "cookie": "_oauth2_proxy_ai2_csrf=4fcd8638ae5002c58dfb244e231d3b40"
+    },
+    "referrerPolicy": "strict-origin-when-cross-origin",
+    "body": JSON.stringify(data),
+    "method": "POST",
+    "mode": "cors"
+  }).then(r => r.json())
+    .then(j => { console.log(j); res.json({ answer: j['answer'] }) })
+    .catch(err => console.log("err ", err));
 
 });
 

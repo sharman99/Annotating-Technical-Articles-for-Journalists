@@ -5,11 +5,9 @@ const request = require('request');
 const SummarizerManager = require('node-summarizer').SummarizerManager;
 const tr = require('textrank');
 const sum = require('sum');
-const NLPCloudClient = require('nlpcloud');
 
 const N_SENTENCES = 3;
 const EMPTY_TEXT = "No summary available for this section. Please try another section.";
-const NLPCLOUD_API_KEY = '4d47dda23cf7bc539461418bf02e27cd800a0577';
 
 // TODO: Use article title (e.g., with jsteaser) for better results?a
 export function summarize({ selectedSummarizer, ...args }) {
@@ -24,10 +22,44 @@ export function summarize({ selectedSummarizer, ...args }) {
     "JS Teaser" : doJsTeaser,
     "Sum" : doSum,
     "LexRank" : doLexRank,
+    "SciTLDR": doSciTLDR,
 
   })[selectedSummarizer](args);
 
 };
+
+function doSciTLDR({ sectionTexts, callback }) {
+
+  // If have abstract, use that; else use whole thing
+  const abs = sectionTexts.find(s => s.name === "Abstract");
+  const intro = sectionTexts.find(s => s.name === "Introduction");
+  const res = sectionTexts.find(s => s.name === "Results");
+
+  let data = [];
+  if (abs) { 
+    console.log("for scitldr, using abstract");
+    data = {
+      "question": abs.text,
+      "choices": [
+        (intro || {text: ""}).text,
+        (res || { text: "" }).text,
+      ]
+    };
+  } else {
+    console.log("for scitldr, using all");
+    data = {
+      "question": sectionTexts.find(s => s.name === "All").text,
+      "choices": [ "", "" ],
+    };
+  }
+
+  const headers = { 'Content-Type': 'application/json' };
+
+  fetch('http://localhost:3001/tldr', { headers, body: JSON.stringify(data), method: 'POST' })
+    .then((res) => res.json())
+    .then((data) => { console.log("backend data ", data); callback(data['answer']) });
+
+}
 
 function doBart({ selectedSection, sectionTexts, callback }) {
 
