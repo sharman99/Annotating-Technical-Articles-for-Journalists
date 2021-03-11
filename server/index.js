@@ -54,7 +54,7 @@ app.post('/tldr', (req, res) => {
     "mode": "cors"
   }).then(r => r.json())
     .then(j => { console.log(j); res.json({ answer: j['answer'] }) })
-    .catch(err => console.log("err ", err));
+    .catch(err => { console.log("err ", err); res.json({ err }) });
 
 });
 
