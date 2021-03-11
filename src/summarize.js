@@ -5,15 +5,18 @@ const request = require('request');
 const SummarizerManager = require('node-summarizer').SummarizerManager;
 const tr = require('textrank');
 const sum = require('sum');
+const NLPCloudClient = require('nlpcloud');
 
 const N_SENTENCES = 3;
 const EMPTY_TEXT = "No summary available for this section. Please try another section.";
+const NLPCLOUD_API_KEY = '4d47dda23cf7bc539461418bf02e27cd800a0577';
 
 // TODO: Use article title (e.g., with jsteaser) for better results?a
 export function summarize({ selectedSummarizer, ...args }) {
 
   ({
 
+    "Bart": () => null, //doBart,
     "Text Monkey": doTextMonkey,
     "Paper Digest" : doPaperDigest,
     "JS Teaser" : doJsTeaser,
@@ -22,7 +25,26 @@ export function summarize({ selectedSummarizer, ...args }) {
 
   })[selectedSummarizer](args);
 
+  console.log("calling backend");
+  fetch("/api")
+    .then((res) => res.json())
+    .then((data) => console.log("backend data ", data));
+
 };
+
+function doBart({ ...args }) {
+
+  const client = new NLPCloudClient('bart-large-cnn', NLPCLOUD_API_KEY);
+  const text = "John Doe is a Go Developer at Google. He has been working there for 10 years.";
+
+  client.summarization(text)
+    .then(function(r) {
+      console.log(r.data) 
+    }).catch(function(err) {
+      console.log(err);
+    });
+
+}
 
 function doTextMonkey({ selectedSection, sectionTexts, title, callback }) {
 
