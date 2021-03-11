@@ -4,10 +4,11 @@ import MenuItem from '@material-ui/core/MenuItem';
 
 import { summarize } from './summarize';
 
-const summarizers = ["Bart", "TextRank", "JSTeaser", "Sum", "Paper Digest", "LexRank", "Text Monkey" ];
+const summarizers = ["Bart", "TextRank", "JSTeaser", "Sum", "Paper Digest", "LexRank", "Text Monkey", "SciTLDR" ];
 
 const fixedSectionSummarizers = [
   { name: 'Paper Digest', sections: ["introduction", "results", "discussion", "conclusions"] },
+  { name: "SciTLDR", sections: ["TL;DR"] },
 ];
 
 const Summary = ({ file, getPD, sectionTexts, title }) => {
@@ -57,7 +58,7 @@ const Summary = ({ file, getPD, sectionTexts, title }) => {
     }
   };
 
-  const formatSectionName = sN => sN.charAt(0).toUpperCase() + sN.substring(1).toLowerCase();
+  const formatSectionName = sN => sN.charAt(0).toUpperCase() + sN.substring(1);
 
   return (
     <div className='metadata'>

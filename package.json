@@ -23,6 +23,7 @@
     "natural": "^4.0.0",
     "nlcst-to-string": "^2.0.4",
     "nlpcloud": "^1.0.7",
+    "node-fetch": "^2.6.1",
     "node-nlp": "^4.21.3",
     "node-summarizer": "^1.0.7",
     "npm-run-all": "^4.1.5",
