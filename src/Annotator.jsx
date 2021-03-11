@@ -2,6 +2,7 @@ import 'react-pdf/dist/umd/Page/AnnotationLayer.css';
 import React, { useState } from 'react';
 import { pdfjs } from 'react-pdf';
 import { Button } from '@material-ui/core';
+import { getDoBart } from './bart';
 
 import { getDoPaperDigest } from './paperDigest';
 import PDFViewer from './PDFViewer';
@@ -16,6 +17,7 @@ export default function Annotator() {
   const [text, setText] = useState('');
   const [title, setTitle] = useState('');
   const [getPD, _] = useState(() => getDoPaperDigest());
+  const [getBart, setGetBart] = useState(null);
   const [sectionTexts, setSectionTexts] = useState([]);
   const hiddenFileInput = React.useRef(null);
 
@@ -113,6 +115,7 @@ export default function Annotator() {
       sectionTexts.splice(1, 0, { 'name' : 'Abstract', 'text' : firstSectionText });
     }
 
+    setGetBart(() => getDoBart(sectionTexts));
     return sectionTexts;
 
   };
@@ -131,6 +134,7 @@ export default function Annotator() {
             <ResearcherInfo title={title} />
             <Summary
               file={file}
+              getBart={getBart}
               getPD={getPD}
               sectionTexts={sectionTexts}
               title={title}

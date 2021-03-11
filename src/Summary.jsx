@@ -11,7 +11,7 @@ const fixedSectionSummarizers = [
   { name: "SciTLDR", sections: ["TL;DR"] },
 ];
 
-const Summary = ({ file, getPD, sectionTexts, title }) => {
+const Summary = ({ file, getBart, getPD, sectionTexts, title }) => {
 
   const [selectedSummarizer, setSelectedSummarizer] = useState('LexRank');
   const [isSummarizing, setIsSummarizing] = useState(false);
@@ -34,6 +34,7 @@ const Summary = ({ file, getPD, sectionTexts, title }) => {
     summarize({
       selectedSummarizer,
       selectedSection,
+      getBart,
       getPD,
       sectionTexts,
       file,
