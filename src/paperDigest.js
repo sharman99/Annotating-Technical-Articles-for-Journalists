@@ -1,4 +1,5 @@
 const API_KEY = "Ds4BRd3GkrA5Uby8";
+const PROXY = "https://floating-sea-66273.herokuapp.com/";
 
 const parseResult = result => {
 
@@ -59,7 +60,7 @@ export function getDoPaperDigest() {
             redirect: "follow",
           };
 
-          fetch(url, requestOptions)
+          fetch(PROXY + url, requestOptions)
             .then(response => response.json())
             .then(result => {
 

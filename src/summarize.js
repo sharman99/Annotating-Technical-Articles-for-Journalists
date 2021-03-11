@@ -8,11 +8,11 @@ const sum = require('sum');
 
 const N_SENTENCES = 3;
 const EMPTY_TEXT = "No summary available for this section. Please try another section.";
+const SERVER = 'http://agile-journey-26810.herokuapp.com';
 
-// TODO: Use article title (e.g., with jsteaser) for better results?a
 export function summarize({ selectedSummarizer, ...args }) {
 
-  console.log("summarize() called with  args ", args);
+  console.log("summarize() called with summarizer ", selectedSummarizer, "  args ", args);
 
   ({
 
@@ -55,24 +55,16 @@ function doSciTLDR({ sectionTexts, callback }) {
 
   const headers = { 'Content-Type': 'application/json' };
 
-  fetch('http://localhost:3001/tldr', { headers, body: JSON.stringify(data), method: 'POST' })
+  fetch(SERVER + '/tldr', { headers, body: JSON.stringify(data), method: 'POST' })
     .then((res) => res.json())
-    .then((data) => { console.log("backend data ", data); callback(data['answer']) });
+    .then((data) => { console.log("backend data ", data); callback(data['answer'] || 'Not available') });
 
 }
 
-function doBart({ selectedSection, sectionTexts, callback }) {
+function doBart({ callback, getBart, selectedSection }) {
 
-  const rawText = sectionTexts.find(s => s['name'] === selectedSection).text;
-  const TOKEN_LIMIT = 700; // NLPCloud/Bart won't summarize more than 1024 tokens; but their tokenization is more aggressive than breaking on spaces
-  const text = rawText.split(" ").slice(0, TOKEN_LIMIT).join(" ");
-
-  const data = { text };
-  const headers = { 'Content-Type': 'application/json' };
-
-  fetch('http://localhost:3001/bart', { headers, body: JSON.stringify(data), method: 'POST' })
-    .then((res) => res.json())
-    .then((data) => { console.log("backend data ", data); callback(data['summary_text']) });
+  getBart(selectedSection)
+    .then(callback)
 
 }
 
