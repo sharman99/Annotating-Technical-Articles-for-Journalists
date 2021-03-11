@@ -5,15 +5,20 @@ const request = require('request');
 const SummarizerManager = require('node-summarizer').SummarizerManager;
 const tr = require('textrank');
 const sum = require('sum');
+const NLPCloudClient = require('nlpcloud');
 
 const N_SENTENCES = 3;
 const EMPTY_TEXT = "No summary available for this section. Please try another section.";
+const NLPCLOUD_API_KEY = '4d47dda23cf7bc539461418bf02e27cd800a0577';
 
 // TODO: Use article title (e.g., with jsteaser) for better results?a
 export function summarize({ selectedSummarizer, ...args }) {
 
+  console.log("summarize() called with  args ", args);
+
   ({
 
+    "Bart": doBart,
     "Text Monkey": doTextMonkey,
     "Paper Digest" : doPaperDigest,
     "JS Teaser" : doJsTeaser,
@@ -23,6 +28,21 @@ export function summarize({ selectedSummarizer, ...args }) {
   })[selectedSummarizer](args);
 
 };
+
+function doBart({ selectedSection, sectionTexts, callback }) {
+
+  const rawText = sectionTexts.find(s => s['name'] === selectedSection).text;
+  const TOKEN_LIMIT = 700; // NLPCloud/Bart won't summarize more than 1024 tokens; but their tokenization is more aggressive than breaking on spaces
+  const text = rawText.split(" ").slice(0, TOKEN_LIMIT).join(" ");
+
+  const data = { text };
+  const headers = { 'Content-Type': 'application/json' };
+
+  fetch('http://localhost:3001/bart', { headers, body: JSON.stringify(data), method: 'POST' })
+    .then((res) => res.json())
+    .then((data) => { console.log("backend data ", data); callback(data['summary_text']) });
+
+}
 
 function doTextMonkey({ selectedSection, sectionTexts, title, callback }) {
 
