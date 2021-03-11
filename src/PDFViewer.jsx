@@ -152,7 +152,7 @@ export default function PDFViewer({ text, file, sectionTexts }) {
       const partialKeyTerm = textItem.str.slice(matchIndexStartInTextItem, matchIndexEndInTextItem);
 
       // Save partial match
-      if (matchIndexStartInTextItem == 0) {
+      if (matchIndexStartInTextItem === 0) {
         leftPartialMatches.push(partialKeyTerm);
       } else {
         rightPartialMatches.push(partialKeyTerm);
