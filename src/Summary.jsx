@@ -4,7 +4,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 
 import { summarize } from './summarize';
 
-const summarizers = ["Bart", "TextRank", "JSTeaser", "Sum", "Paper Digest", "LexRank", "Text Monkey" ];
+const summarizers = ["Bart", "TextRank", "JSTeaser", "Sum", "Paper Digest", "LexRank", "Text Monkey", "Vectorspace" ];
 
 const fixedSectionSummarizers = [
   { name: 'Paper Digest', sections: ["introduction", "results", "discussion", "conclusions"] },

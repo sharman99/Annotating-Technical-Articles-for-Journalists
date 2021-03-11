@@ -1,0 +1,365 @@
+
+> arviz@0.1.0 start /Users/charliecurnin/Desktop/3W/CS206/code/Annotating-Technical-Articles-for-Journalists
+> concurrently "npm-run-all -p backend-start start-js"
+
+[0] 
+[0] > arviz@0.1.0 backend-start /Users/charliecurnin/Desktop/3W/CS206/code/Annotating-Technical-Articles-for-Journalists
+[0] > NODE_ENV=production node server/index.js
+[0] 
+[0] 
+[0] > arviz@0.1.0 start-js /Users/charliecurnin/Desktop/3W/CS206/code/Annotating-Technical-Articles-for-Journalists
+[0] > react-scripts start
+[0] 
+[0] Server listening on 3001
+[0] [34mℹ[39m [90m｢wds｣[39m: Project is running at http://192.168.1.5/
+[0] [34mℹ[39m [90m｢wds｣[39m: webpack output is served from 
+[0] [34mℹ[39m [90m｢wds｣[39m: Content not from webpack is served from /Users/charliecurnin/Desktop/3W/CS206/code/Annotating-Technical-Articles-for-Journalists/public
+[0] [34mℹ[39m [90m｢wds｣[39m: 404s will fallback to /
+[0] Starting the development server...
+[0] 
+[0] Compiled with warnings.
+[0] 
+[0] ./node_modules/colors/lib/colors.js
+[0] Critical dependency: the request of a dependency is an expression
+[0] 
+[0] ./node_modules/node-summarizer/node_modules/natural/lib/natural/sentiment/SentimentAnalyzer.js
+[0] Critical dependency: the request of a dependency is an expression
+[0] 
+[0] ./node_modules/node-summarizer/node_modules/natural/lib/natural/sentiment/SentimentAnalyzer.js
+[0] Critical dependency: the request of a dependency is an expression
+[0] 
+[0] ./node_modules/natural/lib/natural/classifiers/classifier_train_parallel.js
+[0] Module not found: Can't resolve 'webworker-threads' in '/Users/charliecurnin/Desktop/3W/CS206/code/Annotating-Technical-Articles-for-Journalists/node_modules/natural/lib/natural/classifiers'
+[0] 
+[0] ./node_modules/node-summarizer/node_modules/natural/lib/natural/classifiers/classifier.js
+[0] Module not found: Can't resolve 'webworker-threads' in '/Users/charliecurnin/Desktop/3W/CS206/code/Annotating-Technical-Articles-for-Journalists/node_modules/node-summarizer/node_modules/natural/lib/natural/classifiers'
+[0] 
+[0] src/Annotator.jsx
+[0]   Line 18:17:  '_' is assigned a value but never used  no-unused-vars
+[0] 
+[0] src/PDFViewer.jsx
+[0]   Line 165:6:  React Hook useCallback has a missing dependency: 'highlightPattern'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+[0] 
+[0] src/ResearcherInfo.jsx
+[0]   Line 1:16:    'useState' is defined but never used  no-unused-vars
+[0]   Line 35:57:   Expected '!==' and instead saw '!='   eqeqeq
+[0]   Line 35:81:   Expected '!==' and instead saw '!='   eqeqeq
+[0]   Line 63:57:   Expected '!==' and instead saw '!='   eqeqeq
+[0]   Line 63:83:   Expected '!==' and instead saw '!='   eqeqeq
+[0]   Line 90:41:   Expected '===' and instead saw '=='   eqeqeq
+[0]   Line 102:37:  Expected '===' and instead saw '=='   eqeqeq
+[0]   Line 123:39:  Expected '!==' and instead saw '!='   eqeqeq
+[0]   Line 169:91:  Expected '!==' and instead saw '!='   eqeqeq
+[0] 
+[0] src/Summary.jsx
+[0]   Line 54:20:  Expected '!==' and instead saw '!='  eqeqeq
+[0] 
+[0] src/jsteaser.js
+[0]   Line 1:1:     'use strict' is unnecessary inside of modules                                   strict
+[0]   Line 71:48:   Unnecessary escape character: \!                                                no-useless-escape
+[0]   Line 107:7:   'wordKeys' is assigned a value but never used                                   no-unused-vars
+[0]   Line 108:7:   'rvIndex' is defined but never used                                             no-unused-vars
+[0]   Line 117:19:  Function declared in a loop contains unsafe references to variable(s) 'i'       no-loop-func
+[0]   Line 246:30:  Unexpected whitespace before property 0                                         no-whitespace-before-property
+[0]   Line 255:32:  Array.prototype.filter() expects a value to be returned at the end of function  array-callback-return
+[0]   Line 263:7:   'k' is already defined                                                          no-redeclare
+[0] 
+[0] src/paperDigest.js
+[0]   Line 1:7:  'API_KEY' is assigned a value but never used  no-unused-vars
+[0] 
+[0] src/summarize.js
+[0]   Line 3:7:     'unirest' is assigned a value but never used           no-unused-vars
+[0]   Line 8:7:     'NLPCloudClient' is assigned a value but never used    no-unused-vars
+[0]   Line 12:7:    'NLPCLOUD_API_KEY' is assigned a value but never used  no-unused-vars
+[0]   Line 50:9:    'text' is assigned a value but never used              no-unused-vars
+[0]   Line 128:10:  'doTextRank' is defined but never used                 no-unused-vars
+[0]   Line 136:10:  'doNodeSummarizer' is defined but never used           no-unused-vars
+[0]   Line 143:9:   'textRankSummary' is assigned a value but never used   no-unused-vars
+[0] 
+[0] src/terms.js
+[0]   Line 8:7:    'vfile' is assigned a value but never used  no-unused-vars
+[0]   Line 17:21:  Expected '===' and instead saw '=='         eqeqeq
+[0]   Line 19:28:  Expected '===' and instead saw '=='         eqeqeq
+[0]   Line 21:28:  Expected '===' and instead saw '=='         eqeqeq
+[0]   Line 23:28:  Expected '===' and instead saw '=='         eqeqeq
+[0]   Line 25:28:  Expected '===' and instead saw '=='         eqeqeq
+[0]   Line 27:28:  Expected '===' and instead saw '=='         eqeqeq
+[0] 
+[0] Search for the keywords to learn more about each warning.
+[0] To ignore, add // eslint-disable-next-line to the line before.
+[0] 
+[0] Got file with name  pdf.pdf
+[0] Got file with name  pdf.pdf
+[0] Response {
+[0]   size: 0,
+[0]   timeout: 0,
+[0]   [Symbol(Body internals)]: {
+[0]     body: PassThrough {
+[0]       _readableState: [ReadableState],
+[0]       _events: [Object: null prototype],
+[0]       _eventsCount: 2,
+[0]       _maxListeners: undefined,
+[0]       _writableState: [WritableState],
+[0]       allowHalfOpen: true,
+[0]       [Symbol(kCapture)]: false,
+[0]       [Symbol(kTransformState)]: [Object]
+[0]     },
+[0]     disturbed: false,
+[0]     error: null
+[0]   },
+[0]   [Symbol(Response internals)]: {
+[0]     url: 'http://www.paper-digest.com/pdf',
+[0]     status: 503,
+[0]     statusText: 'Service Unavailable',
+[0]     headers: Headers { [Symbol(map)]: [Object: null prototype] },
+[0]     counter: 0
+[0]   }
+[0] }
+[0] <!DOCTYPE html>
+[0] 	<html>
+[0] 	  <head>
+[0] 		<meta name="viewport" content="width=device-width, initial-scale=1">
+[0] 		<meta charset="utf-8">
+[0] 		<title>Application Error</title>
+[0] 		<style media="screen">
+[0] 		  html,body,iframe {
+[0] 			margin: 0;
+[0] 			padding: 0;
+[0] 		  }
+[0] 		  html,body {
+[0] 			height: 100%;
+[0] 			overflow: hidden;
+[0] 		  }
+[0] 		  iframe {
+[0] 			width: 100%;
+[0] 			height: 100%;
+[0] 			border: 0;
+[0] 		  }
+[0] 		</style>
+[0] 	  </head>
+[0] 	  <body>
+[0] 		<iframe src="//www.herokucdn.com/error-pages/application-error.html"></iframe>
+[0] 	  </body>
+[0] 	</html>
+[0] server PD err:  TypeError: Cannot destructure property 'metadata' of 'result' as it is undefined.
+[0]     at parseResult (/Users/charliecurnin/Desktop/3W/CS206/code/Annotating-Technical-Articles-for-Journalists/server/index.js:44:13)
+[0]     at /Users/charliecurnin/Desktop/3W/CS206/code/Annotating-Technical-Articles-for-Journalists/server/index.js:87:30
+[0]     at processTicksAndRejections (internal/process/task_queues.js:93:5)
+[0] Response {
+[0]   size: 0,
+[0]   timeout: 0,
+[0]   [Symbol(Body internals)]: {
+[0]     body: PassThrough {
+[0]       _readableState: [ReadableState],
+[0]       _events: [Object: null prototype],
+[0]       _eventsCount: 2,
+[0]       _maxListeners: undefined,
+[0]       _writableState: [WritableState],
+[0]       allowHalfOpen: true,
+[0]       [Symbol(kCapture)]: false,
+[0]       [Symbol(kTransformState)]: [Object]
+[0]     },
+[0]     disturbed: false,
+[0]     error: null
+[0]   },
+[0]   [Symbol(Response internals)]: {
+[0]     url: 'http://www.paper-digest.com/pdf',
+[0]     status: 503,
+[0]     statusText: 'Service Unavailable',
+[0]     headers: Headers { [Symbol(map)]: [Object: null prototype] },
+[0]     counter: 0
+[0]   }
+[0] }
+[0] <!DOCTYPE html>
+[0] 	<html>
+[0] 	  <head>
+[0] 		<meta name="viewport" content="width=device-width, initial-scale=1">
+[0] 		<meta charset="utf-8">
+[0] 		<title>Application Error</title>
+[0] 		<style media="screen">
+[0] 		  html,body,iframe {
+[0] 			margin: 0;
+[0] 			padding: 0;
+[0] 		  }
+[0] 		  html,body {
+[0] 			height: 100%;
+[0] 			overflow: hidden;
+[0] 		  }
+[0] 		  iframe {
+[0] 			width: 100%;
+[0] 			height: 100%;
+[0] 			border: 0;
+[0] 		  }
+[0] 		</style>
+[0] 	  </head>
+[0] 	  <body>
+[0] 		<iframe src="//www.herokucdn.com/error-pages/application-error.html"></iframe>
+[0] 	  </body>
+[0] 	</html>
+[0] server PD err:  TypeError: Cannot destructure property 'metadata' of 'result' as it is undefined.
+[0]     at parseResult (/Users/charliecurnin/Desktop/3W/CS206/code/Annotating-Technical-Articles-for-Journalists/server/index.js:44:13)
+[0]     at /Users/charliecurnin/Desktop/3W/CS206/code/Annotating-Technical-Articles-for-Journalists/server/index.js:87:30
+[0]     at processTicksAndRejections (internal/process/task_queues.js:93:5)
+[0] Compiling...
+[0] Compiled with warnings.
+[0] 
+[0] ./node_modules/node-summarizer/node_modules/natural/lib/natural/sentiment/SentimentAnalyzer.js
+[0] Critical dependency: the request of a dependency is an expression
+[0] 
+[0] ./node_modules/node-summarizer/node_modules/natural/lib/natural/sentiment/SentimentAnalyzer.js
+[0] Critical dependency: the request of a dependency is an expression
+[0] 
+[0] ./node_modules/colors/lib/colors.js
+[0] Critical dependency: the request of a dependency is an expression
+[0] 
+[0] ./node_modules/natural/lib/natural/classifiers/classifier_train_parallel.js
+[0] Module not found: Can't resolve 'webworker-threads' in '/Users/charliecurnin/Desktop/3W/CS206/code/Annotating-Technical-Articles-for-Journalists/node_modules/natural/lib/natural/classifiers'
+[0] 
+[0] ./node_modules/node-summarizer/node_modules/natural/lib/natural/classifiers/classifier.js
+[0] Module not found: Can't resolve 'webworker-threads' in '/Users/charliecurnin/Desktop/3W/CS206/code/Annotating-Technical-Articles-for-Journalists/node_modules/node-summarizer/node_modules/natural/lib/natural/classifiers'
+[0] 
+[0] Search for the keywords to learn more about each warning.
+[0] To ignore, add // eslint-disable-next-line to the line before.
+[0] 
+[0] Got file with name  pdf.pdf
+[0] Got file with name  pdf.pdf
+[0] Response {
+[0]   size: 0,
+[0]   timeout: 0,
+[0]   [Symbol(Body internals)]: {
+[0]     body: PassThrough {
+[0]       _readableState: [ReadableState],
+[0]       _events: [Object: null prototype],
+[0]       _eventsCount: 2,
+[0]       _maxListeners: undefined,
+[0]       _writableState: [WritableState],
+[0]       allowHalfOpen: true,
+[0]       [Symbol(kCapture)]: false,
+[0]       [Symbol(kTransformState)]: [Object]
+[0]     },
+[0]     disturbed: false,
+[0]     error: null
+[0]   },
+[0]   [Symbol(Response internals)]: {
+[0]     url: 'http://www.paper-digest.com/pdf',
+[0]     status: 503,
+[0]     statusText: 'Service Unavailable',
+[0]     headers: Headers { [Symbol(map)]: [Object: null prototype] },
+[0]     counter: 0
+[0]   }
+[0] }
+[0] <!DOCTYPE html>
+[0] 	<html>
+[0] 	  <head>
+[0] 		<meta name="viewport" content="width=device-width, initial-scale=1">
+[0] 		<meta charset="utf-8">
+[0] 		<title>Application Error</title>
+[0] 		<style media="screen">
+[0] 		  html,body,iframe {
+[0] 			margin: 0;
+[0] 			padding: 0;
+[0] 		  }
+[0] 		  html,body {
+[0] 			height: 100%;
+[0] 			overflow: hidden;
+[0] 		  }
+[0] 		  iframe {
+[0] 			width: 100%;
+[0] 			height: 100%;
+[0] 			border: 0;
+[0] 		  }
+[0] 		</style>
+[0] 	  </head>
+[0] 	  <body>
+[0] 		<iframe src="//www.herokucdn.com/error-pages/application-error.html"></iframe>
+[0] 	  </body>
+[0] 	</html>
+[0] server PD err:  TypeError: Cannot destructure property 'metadata' of 'result' as it is undefined.
+[0]     at parseResult (/Users/charliecurnin/Desktop/3W/CS206/code/Annotating-Technical-Articles-for-Journalists/server/index.js:44:13)
+[0]     at /Users/charliecurnin/Desktop/3W/CS206/code/Annotating-Technical-Articles-for-Journalists/server/index.js:87:30
+[0]     at processTicksAndRejections (internal/process/task_queues.js:93:5)
+[0] Response {
+[0]   size: 0,
+[0]   timeout: 0,
+[0]   [Symbol(Body internals)]: {
+[0]     body: PassThrough {
+[0]       _readableState: [ReadableState],
+[0]       _events: [Object: null prototype],
+[0]       _eventsCount: 2,
+[0]       _maxListeners: undefined,
+[0]       _writableState: [WritableState],
+[0]       allowHalfOpen: true,
+[0]       [Symbol(kCapture)]: false,
+[0]       [Symbol(kTransformState)]: [Object]
+[0]     },
+[0]     disturbed: false,
+[0]     error: null
+[0]   },
+[0]   [Symbol(Response internals)]: {
+[0]     url: 'http://www.paper-digest.com/pdf',
+[0]     status: 503,
+[0]     statusText: 'Service Unavailable',
+[0]     headers: Headers { [Symbol(map)]: [Object: null prototype] },
+[0]     counter: 0
+[0]   }
+[0] }
+[0] <!DOCTYPE html>
+[0] 	<html>
+[0] 	  <head>
+[0] 		<meta name="viewport" content="width=device-width, initial-scale=1">
+[0] 		<meta charset="utf-8">
+[0] 		<title>Application Error</title>
+[0] 		<style media="screen">
+[0] 		  html,body,iframe {
+[0] 			margin: 0;
+[0] 			padding: 0;
+[0] 		  }
+[0] 		  html,body {
+[0] 			height: 100%;
+[0] 			overflow: hidden;
+[0] 		  }
+[0] 		  iframe {
+[0] 			width: 100%;
+[0] 			height: 100%;
+[0] 			border: 0;
+[0] 		  }
+[0] 		</style>
+[0] 	  </head>
+[0] 	  <body>
+[0] 		<iframe src="//www.herokucdn.com/error-pages/application-error.html"></iframe>
+[0] 	  </body>
+[0] 	</html>
+[0] server PD err:  TypeError: Cannot destructure property 'metadata' of 'result' as it is undefined.
+[0]     at parseResult (/Users/charliecurnin/Desktop/3W/CS206/code/Annotating-Technical-Articles-for-Journalists/server/index.js:44:13)
+[0]     at /Users/charliecurnin/Desktop/3W/CS206/code/Annotating-Technical-Articles-for-Journalists/server/index.js:87:30
+[0]     at processTicksAndRejections (internal/process/task_queues.js:93:5)
+[0] Compiling...
+[0] Compiled with warnings.
+[0] 
+[0] ./node_modules/colors/lib/colors.js
+[0] Critical dependency: the request of a dependency is an expression
+[0] 
+[0] ./node_modules/node-summarizer/node_modules/natural/lib/natural/sentiment/SentimentAnalyzer.js
+[0] Critical dependency: the request of a dependency is an expression
+[0] 
+[0] ./node_modules/node-summarizer/node_modules/natural/lib/natural/sentiment/SentimentAnalyzer.js
+[0] Critical dependency: the request of a dependency is an expression
+[0] 
+[0] ./node_modules/natural/lib/natural/classifiers/classifier_train_parallel.js
+[0] Module not found: Can't resolve 'webworker-threads' in '/Users/charliecurnin/Desktop/3W/CS206/code/Annotating-Technical-Articles-for-Journalists/node_modules/natural/lib/natural/classifiers'
+[0] 
+[0] ./node_modules/node-summarizer/node_modules/natural/lib/natural/classifiers/classifier.js
+[0] Module not found: Can't resolve 'webworker-threads' in '/Users/charliecurnin/Desktop/3W/CS206/code/Annotating-Technical-Articles-for-Journalists/node_modules/node-summarizer/node_modules/natural/lib/natural/classifiers'
+[0] 
+[0] src/summarize.js
+[0]   Line 3:7:     'unirest' is assigned a value but never used           no-unused-vars
+[0]   Line 8:7:     'NLPCloudClient' is assigned a value but never used    no-unused-vars
+[0]   Line 12:7:    'NLPCLOUD_API_KEY' is assigned a value but never used  no-unused-vars
+[0]   Line 51:9:    'text' is assigned a value but never used              no-unused-vars
+[0]   Line 129:10:  'doTextRank' is defined but never used                 no-unused-vars
+[0]   Line 137:10:  'doNodeSummarizer' is defined but never used           no-unused-vars
+[0]   Line 144:9:   'textRankSummary' is assigned a value but never used   no-unused-vars
+[0] 
+[0] Search for the keywords to learn more about each warning.
+[0] To ignore, add // eslint-disable-next-line to the line before.
+[0] 

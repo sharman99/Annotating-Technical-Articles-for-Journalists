@@ -24,6 +24,7 @@ export function summarize({ selectedSummarizer, ...args }) {
     "JS Teaser" : doJsTeaser,
     "Sum" : doSum,
     "LexRank" : doLexRank,
+    "Vectorspace" : doVectorspace,
 
   })[selectedSummarizer](args);
 
@@ -41,6 +42,28 @@ function doBart({ selectedSection, sectionTexts, callback }) {
   fetch('http://localhost:3001/bart', { headers, body: JSON.stringify(data), method: 'POST' })
     .then((res) => res.json())
     .then((data) => { console.log("backend data ", data); callback(data['summary_text']) });
+
+}
+
+function doVectorspace({ selectedSection, sectionTexts, callback }) {
+
+  console.log("doVectorspace called");
+  const text = sectionTexts.find(s => s['name'] === selectedSection).text;
+  const options = {
+    method: 'GET',
+    url: 'https://vectorspaceai-vectorspace-ai-summarizer-v1.p.rapidapi.com/recommend/app/summarize',
+    qs: {query: 'text', vxv_token_addr: '0xC2A568489BF6AAC5907fa69f8FD4A9c04323081D'},
+    headers: {
+      'x-rapidapi-key': 'c0e038c6dcmsh8e1cc6a5a5144c8p18b556jsndd49f7573f1a',
+      'x-rapidapi-host': 'vectorspaceai-vectorspace-ai-summarizer-v1.p.rapidapi.com',
+      useQueryString: true
+    }
+  };
+
+  request(options, function (error, response, body) {
+    if (error) throw new Error(error);
+    console.log("body ", body);
+  });
 
 }
 

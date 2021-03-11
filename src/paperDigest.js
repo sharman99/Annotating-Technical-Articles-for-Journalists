@@ -45,6 +45,13 @@ export function getDoPaperDigest() {
 
         } else {
 
+          /*let body = new FormData();
+          body.append("pdf-input", file, "pdf.pdf");
+
+          fetch('http://localhost:3001/pd', { body, method: 'POST' })
+            .then((res) => res.json())
+            .then((data) => { console.log("backend data ", data); resolve(data) });*/
+
           const url = "http://www.paper-digest.com/pdf";
           let headers = new Headers();
           headers.append("key", API_KEY);
