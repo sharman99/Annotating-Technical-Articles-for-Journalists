@@ -6,7 +6,7 @@ export function getDoBart(sectionTexts) {
 
     const key = sectionName;
     const rawText = sectionTexts.find(s => s.name === sectionName).text;
-    const TOKEN_LIMIT = 700;
+    const TOKEN_LIMIT = 500;
     const text = rawText.split(" ").slice(0, TOKEN_LIMIT).join(" ");
 
     return new Promise((resolve, reject) => {
