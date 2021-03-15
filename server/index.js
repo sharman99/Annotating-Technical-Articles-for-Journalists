@@ -21,7 +21,6 @@ app.get('/api', (req, res) => {
 app.post('/bart', (req, res) => {
 
   const text = req.body.text;
-  res.setHeader('Access-Control-Allow-Origin', '*');
 
   client.summarization(text)
     .then(function(r) {
