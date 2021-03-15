@@ -8,6 +8,7 @@ import { getDoPaperDigest } from './paperDigest';
 import PDFViewer from './PDFViewer';
 import ResearcherInfo from './ResearcherInfo';
 import Summary from './Summary';
+import TLDR from './TLDR';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
@@ -132,6 +133,7 @@ export default function Annotator() {
         <div className='sidebyside'>
           <div>
             <ResearcherInfo title={title} />
+            <TLDR sectionTexts={sectionTexts} />
             <Summary
               file={file}
               getBart={getBart}

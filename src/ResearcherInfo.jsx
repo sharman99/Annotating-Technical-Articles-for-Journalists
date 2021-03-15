@@ -168,7 +168,7 @@ class ResearcherInfo extends React.Component {
 
                 {!this.state.found_paper && this.state.submitted && this.state.paper_name != '' && <div id="red">Cannot Find Paper</div>}
 
-                <div><strong>Metadata:</strong></div>
+                <div><strong>Metadata</strong></div>
                 <div>
                     <div>Title: {this.state.title}</div>
                     <div>Citation Count: {this.state.citation_count}</div>

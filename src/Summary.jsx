@@ -4,7 +4,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 
 import { summarize } from './summarize';
 
-const summarizers = ["Bart", "TextRank", "JSTeaser", "Sum", "Paper Digest", "LexRank", "Text Monkey", "SciTLDR" ];
+const summarizers = ["Bart", "TextRank", "JSTeaser", "Sum", "Paper Digest", "LexRank", "Text Monkey"];
 
 const fixedSectionSummarizers = [
   { name: 'Paper Digest', sections: ["introduction", "results", "discussion", "conclusions"] },
@@ -66,7 +66,7 @@ const Summary = ({ file, getBart, getPD, sectionTexts, title }) => {
 
   return (
     <div className='metadata'>
-      <div><strong>Summary:</strong></div>
+      <div><strong>Summary</strong></div>
       {summarizers && <Select
         labelId='summarizer-select-label'
         id='summarizer-select'
