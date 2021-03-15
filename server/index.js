@@ -20,14 +20,12 @@ app.get('/api', (req, res) => {
 
 app.post('/bart', (req, res) => {
 
+  console.log('bart with pre-init client called');
   const text = req.body.text;
 
   client.summarization(text)
-    .then(function(r) {
-      res.json(r.data);
-    }).catch(function(err) {
-      res.json(err);
-    });
+    .then(r => { console.log("bart r ", r); res.json(r.data) })
+    .catch(err => { console.log("bart err ", err); res.json({ err }) });
 
 });
 
@@ -52,8 +50,8 @@ app.post('/tldr', (req, res) => {
     "method": "POST",
     "mode": "cors"
   }).then(r => r.json())
-    .then(j => { console.log(j); res.json({ answer: j['answer'] }) })
-    .catch(err => console.log("err ", err));
+    .then(j => { console.log("tldr json ", j); res.json({ answer: j['answer'] }) })
+    .catch(err => { console.log("tldr err ", err); res.json({ err }) });
 
 });
 
