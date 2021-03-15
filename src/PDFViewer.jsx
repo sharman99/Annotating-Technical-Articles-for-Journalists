@@ -64,7 +64,7 @@ export default function PDFViewer({ text, file, sectionTexts }) {
 
   useEffect(() => ReactTooltip.rebuild());
 
-  const getTooltipText = term => explanations[term] || `tooltip: ${term}`;
+  const getTooltipText = term => explanations[term] || `Couldn't find Wikipedia page for ${term}`;
 
   // Highlight recipe: github.com/wojtekmaj/react-pdf/wiki/Recipes#highlight-text-on-the-page
   const highlightPattern = (text, toHighlight, left=[], right=[]) => {
