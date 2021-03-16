@@ -69,7 +69,7 @@ export function getDoPaperDigest() {
               console.log("PD final: ", parsedResult);
               resolve(parsedResult);
 
-            });
+            }).catch(reject);
 
         }
 

@@ -106,7 +106,7 @@ function doPaperDigest({ selectedSection, getPD, file, callback }) {
       console.log("paper digest for ", selectedSection, " done, ", results);
       const summary = { [selectedSection]: EMPTY_TEXT, ...results.summaries }[selectedSection];
       callback(summary);
-    });
+    }).catch(err => callback(err, err=true));
 
 }
 
