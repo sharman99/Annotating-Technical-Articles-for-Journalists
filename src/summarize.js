@@ -23,6 +23,7 @@ export function summarize({ selectedSummarizer, ...args }) {
     "Sum" : doSum,
     "LexRank" : doLexRank,
     "SciTLDR": doSciTLDR,
+    "TextRank": doTextRank,
 
   })[selectedSummarizer](args);
 
