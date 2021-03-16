@@ -7,7 +7,7 @@ import { identifyTerms } from './terms';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 
-const termExtractors = ["Natural", "Compromise", "Rake", "Retext Key Terms", "Retext Key Phrases"];
+const termExtractors = [/*"Natural",*/ "Compromise", "Rake", "Retext Key Terms", "Retext Key Phrases"];
 
 const wtf = require('wtf_wikipedia');
 
@@ -66,11 +66,12 @@ export default function PDFViewer({ text, file, sectionTexts }) {
 
   const getTooltipText = term => explanations[term] || `Couldn't find Wikipedia page for ${term}`;
 
+  // https://stackoverflow.com/a/6969486/2809263
+  const escapeForRegex = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
   // Highlight recipe: github.com/wojtekmaj/react-pdf/wiki/Recipes#highlight-text-on-the-page
   const highlightPattern = (text, toHighlight, left=[], right=[]) => {
 
-    // https://stackoverflow.com/a/6969486/2809263
-    const escapeForRegex = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
     // TODO: require left patterns to be on left, right on right
     const patterns = [...toHighlight, ...left, ...right];
@@ -133,7 +134,9 @@ export default function PDFViewer({ text, file, sectionTexts }) {
 
       // Check across multiple items
       const textItemWithNeighbors = getTextItemWithNeighbors(textItems, itemIndex);
-      const matchInTextItemWithNeighbors = textItemWithNeighbors.match(keyTerm);
+
+      const escpaedKeyTerm = escapeForRegex(keyTerm);
+      const matchInTextItemWithNeighbors = textItemWithNeighbors.match(escpaedKeyTerm);
       if (!matchInTextItemWithNeighbors) {
         continue;
       }
@@ -173,21 +176,21 @@ export default function PDFViewer({ text, file, sectionTexts }) {
   return (
     <div>
       <ReactTooltip id='highlight-tooltip' className='highlight-tooltip' />
-      <Select
-        labelId='termExtractor-select-label'
-        id='termExtractor-select'
-        value={selectedTermExtractor}
-        onChange={handleTermExtractorChange}
-      >
-        {termExtractors.map(tE => (
-          <MenuItem value={tE}>{tE}</MenuItem>
-        ))}
-      </Select>
       {file &&
         <Document id='pdf'
           file={file}
           onLoadSuccess={onDocumentLoadSuccess}
         >
+          <Select
+            labelId='termExtractor-select-label'
+            id='termExtractor-select'
+            value={selectedTermExtractor}
+            onChange={handleTermExtractorChange}
+          >
+            {termExtractors.map(tE => (
+              <MenuItem value={tE}>{tE}</MenuItem>
+            ))}
+          </Select>
           <Page
             customTextRenderer={textRenderer}
             pageNumber={pageNumber}
