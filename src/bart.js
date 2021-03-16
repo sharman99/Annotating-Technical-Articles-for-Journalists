@@ -1,3 +1,5 @@
+import * as constants from './constants';
+
 export function getDoBart(sectionTexts) {
 
   let cache = {};
@@ -15,7 +17,7 @@ export function getDoBart(sectionTexts) {
         resolve(cache[key]);
       } else {
 
-        cache[key] = 'Loading...';
+        cache[key] = constants.LOADING_TEXT;
 
         const body = JSON.stringify({ text });
         const headers = { 'Content-Type': 'application/json' };

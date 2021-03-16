@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import Modal from 'react-modal';
 import Annotator from './Annotator';
 

@@ -1,4 +1,6 @@
 import { JsTeaser } from './jsteaser';
+import * as constants from './constants';
+
 const lexrank = require('lexrank.js');
 const unirest = require('unirest');
 const request = require('request');
@@ -58,7 +60,7 @@ function doSciTLDR({ sectionTexts, callback }) {
 
   fetch(SERVER + '/tldr', { headers, body: JSON.stringify(data), method: 'POST' })
     .then((res) => res.json())
-    .then((data) => { console.log("backend data ", data); callback(data['answer'] || 'Not available') });
+    .then((data) => { console.log("backend data ", data); callback(data['answer'] || constants.ERROR_TEXT) });
 
 }
 

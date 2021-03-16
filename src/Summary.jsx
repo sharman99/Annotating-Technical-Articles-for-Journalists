@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
+import Loader from "react-loader-spinner";
 
 import { summarize } from './summarize';
+import * as constants from './constants';
 
 const summarizers = ["Bart", "TextRank", "JS Teaser", "Sum", "Paper Digest", "LexRank", "Text Monkey"];
 
@@ -63,6 +65,7 @@ const Summary = ({ file, getBart, getPD, sectionTexts, title }) => {
   };
 
   const formatSectionName = sN => sN.charAt(0).toUpperCase() + sN.substring(1);
+  const text = selectedSectionSummary || constants.SPINNER;
 
   return (
     <div className='metadata'>
@@ -87,7 +90,7 @@ const Summary = ({ file, getBart, getPD, sectionTexts, title }) => {
           <MenuItem value={section}>{formatSectionName(section)}</MenuItem>
         ))}
       </Select>}
-      {selectedSectionSummary}
+      { text }
     </div>
   );
 
