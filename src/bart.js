@@ -17,7 +17,7 @@ export function getDoBart(sectionTexts) {
         resolve(cache[key]);
       } else {
 
-        cache[key] = constants.LOADING_TEXT;
+        cache[key] = constants.SPINNER;
 
         const body = JSON.stringify({ text });
         const headers = { 'Content-Type': 'application/json' };
