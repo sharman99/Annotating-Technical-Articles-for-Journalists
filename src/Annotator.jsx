@@ -81,6 +81,7 @@ export default function Annotator() {
   const splitBySection = text => {
 
     const sectionHeaders = ['Abstract', 'Introduction', 'Results', 'Methods', 'Discussion', 'Conclusion', 'Conclusions', 'References', 'Funding'];
+    const headersOfSectionsFoundAlready = new Set();
 
     let currentSectionWords = [];
     let currentSectionName = '';
@@ -93,7 +94,11 @@ export default function Annotator() {
       }
 
       const titleCaseWord = word[0].toUpperCase() + word.substr(1).toLowerCase();
-      if (sectionHeaders.includes(word) || sectionHeaders.includes(titleCaseWord)) {
+      if (
+        (sectionHeaders.includes(word) || sectionHeaders.includes(titleCaseWord))
+        && !headersOfSectionsFoundAlready.has(titleCaseWord)
+      ) {
+        headersOfSectionsFoundAlready.add(titleCaseWord);
 
         if (!currentSectionName) {
           firstSectionText = currentSectionWords.join(' ');
