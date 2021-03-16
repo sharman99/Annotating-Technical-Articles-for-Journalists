@@ -46,6 +46,19 @@
 }
 
 .react-pdf__Document {
+  padding: 10px;
+}
+
+/*#pdf {
+  padding: 10px;
+}
+
+#termExtractor-select {
+  margin-left: 10px;
+  margin-top: 10px;
+}*/
+
+.react-pdf__Document {
     outline: solid black 1px;
 }
 
