@@ -68,6 +68,7 @@ function doBart({ callback, getBart, selectedSection }) {
 
   getBart(selectedSection)
     .then(callback)
+    .catch(err => callback(err, err=true));
 
 }
 

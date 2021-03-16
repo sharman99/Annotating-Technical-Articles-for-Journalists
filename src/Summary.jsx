@@ -41,8 +41,11 @@ const Summary = ({ file, getBart, getPD, sectionTexts, title }) => {
       sectionTexts,
       file,
       title,
-      callback: (summary) => {
-        console.log("summarizer returned ", summary);
+      callback: (summary, err=false) => {
+        console.log("summarizer returned ", summary, " with err ", err);
+        if (err) {
+          summary = constants.ERROR_TEXT;
+        }
         setSelectedSectionSummary(summary);
         setIsSummarizing(false);
       }

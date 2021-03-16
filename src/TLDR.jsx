@@ -20,12 +20,12 @@ const TLDR = ({ sectionTexts }) => {
     });
   }
 
-  const text = tldrText || constants.LOADING_TEXT;
+  const text = tldrText || constants.SPINNER;
 
   return (
     <div className='metadata'>
       <div><strong>TL;DR</strong></div>
-      { tldrText }
+      { text }
       <div className='attribution'>
         From
         <span> </span>
