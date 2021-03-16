@@ -15,7 +15,7 @@ const fixedSectionSummarizers = [
 
 const Summary = ({ file, getBart, getPD, sectionTexts, title }) => {
 
-  const [selectedSummarizer, setSelectedSummarizer] = useState('Paper Digest');
+  const [selectedSummarizer, setSelectedSummarizer] = useState('LexRank');
   const [isSummarizing, setIsSummarizing] = useState(false);
 
   // Set up available sections

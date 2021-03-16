@@ -44,10 +44,12 @@ export default function Annotator() {
         pdfjs.getDocument(typedArray).promise.then(pdf => {
 
             pdf.getMetadata().then(metadata => {
+              console.log("metadata is ", metadata);
               const title = metadata.info['Title'] || (
                 metadata.metadata
                   ? metadata.metadata.get('dc:title')
                   : '');
+              console.log("got title from metadata ", title);
               if (title) {
                 setTitle(title);
               } else {
