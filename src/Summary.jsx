@@ -6,7 +6,7 @@ import Loader from "react-loader-spinner";
 import { summarize } from './summarize';
 import * as constants from './constants';
 
-const summarizers = ["Paper Digest", "Bart", /*"TextRank", "JS Teaser",*/ "Sum",  "LexRank", "Text Monkey"];
+const summarizers = ["Paper Digest", "Bart", "TextRank", "JS Teaser", "Sum",  "LexRank", "Text Monkey"];
 
 const fixedSectionSummarizers = [
   { name: 'Paper Digest', sections: ["introduction", "results", "discussion", "conclusions"] },

@@ -1,4 +1,4 @@
-const API_KEY = "Ds4BRd3GkrA5Uby8";
+const API_KEY = -1;
 const PROXY = "https://floating-sea-66273.herokuapp.com/";
 
 const parseResult = result => {

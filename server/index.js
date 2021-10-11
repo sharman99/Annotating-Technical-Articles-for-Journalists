@@ -6,7 +6,7 @@ const path = require('path')
 
 const PORT = process.env.PORT || 3001;
 
-const NLPCLOUD_API_KEY = '4d47dda23cf7bc539461418bf02e27cd800a0577';
+const NLPCLOUD_API_KEY = -1;
 const client = new NLPCloudClient('bart-large-cnn', NLPCLOUD_API_KEY);
 
 const app = express();

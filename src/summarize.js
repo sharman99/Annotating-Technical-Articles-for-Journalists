@@ -83,7 +83,7 @@ function doTextMonkey({ selectedSection, sectionTexts, title, callback }) {
     url: 'https://text-monkey-summarizer.p.rapidapi.com/nlp/summarize',
     headers: {
       'content-type': 'application/json',
-      'x-rapidapi-key': 'c0e038c6dcmsh8e1cc6a5a5144c8p18b556jsndd49f7573f1a',
+      'x-rapidapi-key': -1,
       'x-rapidapi-host': 'text-monkey-summarizer.p.rapidapi.com',
       useQueryString: true
     },

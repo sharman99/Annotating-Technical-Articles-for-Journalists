@@ -7,7 +7,7 @@ import { identifyTerms } from './terms';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 
-const termExtractors = [/*"Natural",*/ "Compromise", "Rake", "Retext Key Terms", "Retext Key Phrases"];
+const termExtractors = ["KeywordExtractor", "Natural", "Compromise", "Rake", "Retext Key Terms", "Retext Key Phrases"];
 
 const wtf = require('wtf_wikipedia');
 
